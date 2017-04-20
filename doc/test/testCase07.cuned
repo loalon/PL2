@@ -1,0 +1,30 @@
+/* if, operador logico or */
+
+void main () {
+
+	int a;
+
+	printc("IF OR");
+
+        a=1 || 1;
+        printc("true:");
+
+        if (a || 1) {
+                printc(" true");
+	}
+        else {
+                printc(" false");
+	}
+        
+        
+        
+	a=0 || 0;
+        printc("false:");
+        if (a || 0) {
+                printc(" true");
+	}
+        else {
+                printc(" false");
+	}
+
+}

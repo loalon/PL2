@@ -1,0 +1,42 @@
+/* if con else */
+
+void main() {
+
+
+        int x;
+	int y;
+	int b;
+
+	printc("IF ELSE");
+	
+        x=5;
+        y=4;
+ 
+	b= y>x;
+
+        printc("false:");
+     
+	if (b == 0) {
+                printc(" false");
+	}
+        else
+                printc(" true");
+
+	
+	printc("true:");
+	if (y > 3) 
+                printc(" true");
+        else {
+                printc(" false");
+	}
+
+
+	printc("false:");
+	if (x > 6) {
+		printc(" true");	
+	}
+	else {
+		printc(" false");
+	}
+
+}
