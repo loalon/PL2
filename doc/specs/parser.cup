@@ -738,6 +738,9 @@ expLog ::= expLog:e1 operador:op expLog:e2 //operacion
 		semanticErrorManager.semanticFatalError(name+" no ha sido declarado. ");
 	if (tipo instanceof TypeSimpleVoid)
 		semanticErrorManager.semanticFatalError(name+" es un procedimiento sin retorno. No puede asignarse.");
+	if (!(tipo instanceof TypeSimpleInteger))
+		semanticErrorManager.semanticFatalError("La funcion "+name+" invocada no devuelve un tipo entero.");
+		
 	//eliminar??
 	//	if (! (tipo instanceof TypeSimpleInteger))
 	//	semanticErrorManager.semanticFatalError(name+" no es de tipo ENTERO. ");	
@@ -1014,8 +1017,8 @@ invFunc ::= ID:id OBRACKET invFuncA:inv CBRACKET //ej. decrementar ( invFunA )
 
 	if (tipo==null) 
 		semanticErrorManager.semanticFatalError("Procedimiento: "+name+" no ha sido declarado."+" Linea: "+id.getLine()+" Columna: "+id.getColumn());
-	if (!(tipo instanceof TypeSimpleInteger))
-		semanticErrorManager.semanticFatalError("La funcion "+name+" invocada no devuelve un tipo entero."+" Linea: "+id.getLine()+" Columna: "+id.getColumn());
+	//if (!(tipo instanceof TypeSimpleInteger))
+		//semanticErrorManager.semanticFatalError("La funcion "+name+" invocada no devuelve un tipo entero."+" Linea: "+id.getLine()+" Columna: "+id.getColumn());
 		
 	InvFunc invf = new InvFunc(name, tipo, inv.getNumeroParametros());
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
@@ -1030,6 +1033,7 @@ invFunc ::= ID:id OBRACKET invFuncA:inv CBRACKET //ej. decrementar ( invFunA )
 
 	Variable fun = new Variable(name, scope);
 	cb.addQuadruple("CALL", fun);
+	//cb.addQuadruple("NADA", fun); //solo test
 	invf.setIntermediateCode(cb.create());
 	
 	RESULT=invf;
@@ -1044,8 +1048,8 @@ invFunc ::= ID:id OBRACKET invFuncA:inv CBRACKET //ej. decrementar ( invFunA )
 	TypeIF tipo = symbol.getType();
 	if (tipo==null)
 		semanticErrorManager.semanticFatalError("Procedimiento: "+name+" no ha sido declarado."+" Linea: "+id.getLine()+" Columna: "+id.getColumn());
-	if (!(tipo instanceof TypeSimpleInteger))
-		semanticErrorManager.semanticFatalError("La funcion "+name+" invocada no devuelve un tipo entero."+" Linea: "+id.getLine()+" Columna: "+id.getColumn());
+	//if (!(tipo instanceof TypeSimpleInteger))
+		//semanticErrorManager.semanticFatalError("La funcion "+name+" invocada no devuelve un tipo entero."+" Linea: "+id.getLine()+" Columna: "+id.getColumn());
 
 	if (!(symbol instanceof SymbolFunction || symbol instanceof SymbolProcedure)) 
 		semanticErrorManager.semanticFatalError(""+name+" no es un procediemiento o una funcion."+" Linea: "+id.getLine()+" Columna: "+id.getColumn());
@@ -1055,6 +1059,7 @@ invFunc ::= ID:id OBRACKET invFuncA:inv CBRACKET //ej. decrementar ( invFunA )
 
 	Variable fun = new Variable(name, scope);
 	cb.addQuadruple("CALL", fun);
+	//cb.addQuadruple("NADA", fun); //solo test
 	invf.setIntermediateCode(cb.create());
 	RESULT=invf;
 :};
@@ -1170,6 +1175,7 @@ sentForA ::= FOR OBRACKET ID:id ASSIGMENT expLog:elog SEMICOLON expresion:e1 SEM
 ************************************/
 sentEntrada ::= PRINTI OBRACKET ID:id CBRACKET SEMICOLON 
 {:
+	System.out.println("AQUI");
 	ScopeIF scope = scopeManager.getCurrentScope();
 	String name = id.getLexema();
 
@@ -1197,6 +1203,7 @@ sentEntrada ::= PRINTI OBRACKET ID:id CBRACKET SEMICOLON
 :}
 | PRINTI OBRACKET expresion:e CBRACKET SEMICOLON //
 {:
+System.out.println("AQUI2");
 	ScopeIF scope = scopeManager.getCurrentScope();
 	Sentencia sen= new Sentencia();
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder (scope);
@@ -1439,13 +1446,15 @@ funcion ::= VOID ID:id // procedimiento
 	if(sTable.containsSymbol(name)) 
 		semanticErrorManager.semanticFatalError("La funcion "+name+" ya esta declarado en este ambito. "+" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
 	
-	System.out.println("La funcion VOID es " + name);	
+	System.out.println("La funcion VOID es " + name);
+		//System.out.println("AQUI -2");	
 	ScopeIF scopeX = scopeManager.openScope(name);
-
+	
 :}  OBRACKET funcionS:fs 
 {:
+
 	String name=id.getLexema();
-	ScopeIF scope = scopeManager.getCurrentScope(); //vuelvo al scope padre
+	ScopeIF scope = scopeManager.getCurrentScope(); 
 	SymbolTableIF sTable = scope.getSymbolTable();
 	
 	if (!(fs.getReturnType() instanceof TypeSimpleVoid)) //comprobar return type
@@ -1461,7 +1470,7 @@ funcion ::= VOID ID:id // procedimiento
 	else
 		fun= new Funcion(name, new TypeSimpleVoid(scope), fs.getParametros());
 	
-	LabelIF label = new LabelFactory().create("L_"+name);
+	LabelIF label = new LabelFactory().create(name);
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 	cb.addQuadruple("INL", label); 
 	cb.addQuadruples(fs.getIntermediateCode());
@@ -1478,13 +1487,14 @@ funcion ::= VOID ID:id // procedimiento
 	if(sTable.containsSymbol(name)) 
 		semanticErrorManager.semanticFatalError("La funcion "+name+" ya esta declarado en este ambito. "+" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
 	
-	System.out.println("La funcion VOID es " + name);	
+	System.out.println("La funcion INT es " + name);	
 	ScopeIF scopeX = scopeManager.openScope(name);
 	
 :} OBRACKET funcionS:fs {:
 
+		ScopeIF scope = scopeManager.getCurrentScope();
 	String name=id.getLexema();
-	ScopeIF scope = scopeManager.getCurrentScope();
+
 	SymbolTableIF sTable = scope.getSymbolTable();
 			
 	if (!(fs.getReturnType() instanceof TypeSimpleInteger)) //comprobar return type
@@ -1500,7 +1510,7 @@ funcion ::= VOID ID:id // procedimiento
 	else
 		fun= new Funcion(name, new TypeSimpleInteger(scope), fs.getParametros());
 	
-	LabelIF label = new LabelFactory().create("L_"+name);
+	LabelIF label = new LabelFactory().create(name);
 		
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 	cb.addQuadruple("INL",label); // uno por funcion, para test
@@ -1511,8 +1521,19 @@ funcion ::= VOID ID:id // procedimiento
 
 :};
 
-funcionS ::=  funcionE:fe CBRACKET OBRACE funcionA:fa CBRACE
+funcionS ::=  funcionE:fe CBRACKET OBRACE funcionA:fa CBRACE // parametros){sentencias}
 {:
+		//System.out.println("AQUI -1");
+	//String name=id.getLexema();
+	ScopeIF scope = scopeManager.getCurrentScope();			
+	SymbolTableIF sTable = scope.getSymbolTable();
+	for (String name : fe.getParametros()){
+		if(sTable.containsSymbol(name))
+			semanticErrorManager.semanticFatalError("La funcion "+scope.getName()+" tiene dos parametros de entrada con el mismo nombre.");
+		sTable.addSymbol(name, new SymbolParameter(scope, name, new TypeSimpleInteger(scope)));
+	}
+
+
 	FuncionS fs=new FuncionS(fe, fa.getReturnType());
 	fs.setIntermediateCode(fa.getIntermediateCode());
 	scopeManager.closeScope();	 
@@ -1529,7 +1550,7 @@ funcionS ::=  funcionE:fe CBRACKET OBRACE funcionA:fa CBRACE
 :};
 
 
-funcionA ::= funcionB:fb funcionC:fc funcionD:fd
+funcionA ::= funcionB:fb funcionC:fc funcionD:fd //sentencias
 {: 
 	FuncionA fa =new FuncionA(fd.getReturnType()); //establece tipo de retorno
 	fa.setIntermediateCode(fd.getIntermediateCode());
@@ -1571,6 +1592,7 @@ funcionD ::= sentencia:sen funcionD:fd
 
 	RESULT=fd;
 :} | {:
+
 	ScopeIF scope = scopeManager.getCurrentScope();		
 	FuncionD fd = new FuncionD(scope); //para declarar tipo void por defecto
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
@@ -1583,25 +1605,27 @@ funcionD ::= sentencia:sen funcionD:fd
 funcionE ::= INT ID:id COMMA funcionE:fe 
 //WIP Opcional comprobacion mas arriba
 {:
+	//System.out.println("AQUI -1");
 	String name=id.getLexema();
-	ScopeIF scope = scopeManager.getCurrentScope();			
-	SymbolTableIF sTable = scope.getSymbolTable();
+	//ScopeIF scope = scopeManager.getCurrentScope();			
+	//SymbolTableIF sTable = scope.getSymbolTable();
 	fe.add(name);
-	if(sTable.containsSymbol(name))
-		semanticErrorManager.semanticFatalError("La funcion "+scope.getName()+" tiene dos parametros de entrada con el mismo nombre." +" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
+	//if(sTable.containsSymbol(name))
+		//semanticErrorManager.semanticFatalError("La funcion "+scope.getName()+" tiene dos parametros de entrada con el mismo nombre." +" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
 	
-	sTable.addSymbol(name,new SymbolParameter(scope, name, new TypeSimpleInteger(scope)));
+	//sTable.addSymbol(name,new SymbolParameter(scope, name, new TypeSimpleInteger(scope)));
 	RESULT=fe;
 :}
 | INT ID:id 
 {:
+
 	String name=id.getLexema();
-	ScopeIF scope = scopeManager.getCurrentScope();			
-	SymbolTableIF sTable = scope.getSymbolTable();
+	//ScopeIF scope = scopeManager.getCurrentScope();			
+	//SymbolTableIF sTable = scope.getSymbolTable();
 	FuncionE fe = new FuncionE(name);
-	if(sTable.containsSymbol(name))
-		semanticErrorManager.semanticFatalError("La funcion "+scope.getName()+" tiene dos parametros de entrada con el mismo nombre." +" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
-	sTable.addSymbol(name,new SymbolParameter(scope, name, new TypeSimpleInteger(scope)));
+	//if(sTable.containsSymbol(name))
+		//semanticErrorManager.semanticFatalError("La funcion "+scope.getName()+" tiene dos parametros de entrada con el mismo nombre." +" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
+	//sTable.addSymbol(name,new SymbolParameter(scope, name, new TypeSimpleInteger(scope)));
 	RESULT=fe;
 :};		
 

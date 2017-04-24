@@ -22,12 +22,22 @@ Cuadrado cuadrado, cuad, cosa;
 
 Coordenada cod;
 
+void imprimir(int a) {
+	printi(a);
+}
+int restarUno(int a, int b) {
+	a=a-1;
+	return a;
+}
+
 void main () {
 
 	int uno;
 	int dos;
 	int tres;
 	
+	uno = restarUno(888, 666);
+	/*imprimir(uno);*/
 	for (a=30; a==25; a=a-1) {
 		printi(a);
 	}
