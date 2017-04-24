@@ -14,28 +14,30 @@ public class TranslatorMV extends Translator {
 	protected String translate(QuadrupleIF quadruple) {
 		OperandIF result = quadruple.getResult();
 		OperandIF op1 = quadruple.getFirstOperand();
+		//OperandIF op2= quadruple.getSecondOperand(); //guarda desplazamiento relativo
 		
 		//caso 1 mover constante, result sera un temp y op1 un valor
 		//MV temporal cnte
 		if(result instanceof Temporal && op1 instanceof Value) {
-			Temporal to = (Temporal) result;
 			Value from = (Value) op1;
+			Temporal to = (Temporal) result;
 			temporal.append("MOVE #"+ from.getValue() +", #-"+to.getAddress()+"[.IX]");  
 		}
+	
 		//caso 2 mover temporal a una variable
 		if(result instanceof Variable && op1 instanceof Temporal) {
-			Variable to = (Variable) result;
 			Temporal from = (Temporal) op1;
-			temporal.append("MOVE #-"+ from.getAddress()+"[.IX], #-"+to.getAddress()+"[.IX]");  
+			Variable to = (Variable) result;
+			temporal.append("MOVE #-"+ from.getAddress()+"[.IX], /"+to.getAddress());  
 		}
 		//caso 3 mover variable a un temporal (para imprimir por ejemplo)
 		if(result instanceof Temporal && op1 instanceof Variable) {
-			Temporal to = (Temporal) result;
 			Variable from = (Variable) op1;
-			temporal.append("MOVE #-"+ from.getAddress()+"[.IX], #-"+to.getAddress()+"[.IX]");  
+			Temporal to = (Temporal) result;
+			temporal.append("MOVE /"+ from.getAddress()+", #-"+to.getAddress()+"[.IX]");  
 		}
-		
-		
+		// caso 4 muevo un temp a una variable con desplazamiento relativo
+
 		return temporal.toString();
 	}
 }

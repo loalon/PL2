@@ -172,6 +172,7 @@ program ::=
 		for (SymbolIF simbolo: symbols) {
 			if (simbolo instanceof SymbolVariable) {
 				SymbolVariable s = (SymbolVariable) simbolo;
+				
 				if (s.getType() instanceof TypeString){
 					stringsSize+=s.getType().getSize();
 					continue; //ignora los string al asignar direcciones
@@ -199,7 +200,9 @@ program ::=
 	
 	System.out.println("tamaño strings " +stringsSize);
 	System.out.println("tamaño vars " +gAddress);
-	//cb.addQuadruple("START", new Value(stringsSize)); // instrucciones al arrancar, le paso tamaño global y strings
+	cb.addQuadruple("BR", new Value(gAddress)); // instrucciones al arrancar, le paso tamaño global y strings
+	cb.addQuadruple("ORG", new Value(gAddress)); // instrucciones al arrancar, le paso tamaño global y strings
+	cb.addQuadruple("PRINT", new Value(1234));
 	//reservo para las globales con ORG gAddress 
 
 
@@ -701,12 +704,12 @@ expLog ::= expLog:e1 operador:op expLog:e2 //operacion
 		cb.addQuadruple("MV", temp, new Value(sc.getValue()) ); //mueve el valor a temp
 	} else if (symbol instanceof SymbolVariable) {
 		SymbolVariable sv = (SymbolVariable) symbol;
-		Variable var = new Variable(sv.getName(),sv.getScope());
+		Variable var = new Variable(sv);
 		//cb.addQuadruple("MVA", temp, var); //temp es la direccion de var
 		cb.addQuadruple("MV", temp, var); //temp es la direccion de var
 	} else if (symbol instanceof SymbolParameter) {
 		SymbolParameter sv = (SymbolParameter) symbol;
-		Variable var = new Variable(sv.getName(),sv.getScope());
+		Variable var = new Variable(sv);
 		//cb.addQuadruple("MVA", temp, var); //temp es la direccion de var
 		cb.addQuadruple("MV", temp, var); //temp es la direccion de var
 	}
@@ -765,16 +768,18 @@ expLog ::= expLog:e1 operador:op expLog:e2 //operacion
 
 :}
 | expAcceso:ea
-{: //meter codigo intermedio de acceso, ejemplo buscar la variable y moverla
+{: //WIP meter codigo intermedio de acceso, ejemplo buscar la variable y moverla
 	ScopeIF scope = scopeManager.getCurrentScope();
 	ExpLog e = new ExpLog(new TypeSimpleInteger(scope));
-
-	//TemporalFactory tf = new TemporalFactory(scope);
-	//TemporalIF temp = tf.create();
+	//ea.getVariable();
+	TemporalFactory tf = new TemporalFactory(scope);
+	TemporalIF temp = tf.create();
+	Variable var = new Variable(ea.getVariable());
+	var.setOffset(ea.getOffset());
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
-	//cb.addQuadruple("MV", temp, new Value(Integer.parseInt(n.getLexema())));
-	e.setTemporal(ea.getTemporal());
-	e.setIntermediateCode(ea.getIntermediateCode());
+	cb.addQuadruple("MV", temp, var); //mueve variable acceso a temp
+	e.setTemporal(temp);
+	e.setIntermediateCode(cb.create());
 	
 	RESULT = e;
 :};
@@ -791,13 +796,11 @@ operador::= MINUS {:RESULT=new Operador("MINUS");:}
 //Expresion acceso
 *********************************************/		
 
-expAcceso ::= ID:id1 POINT ID:id2 
+expAcceso ::= ID:id1 POINT ID:id2 //cuadrado.x 
 {:
-
-//cuadrado.x
 	ScopeIF scope = scopeManager.getCurrentScope();
-	String nombre1 = new String (id1.getLexema()); //tipo
-	String nombre2 = new String (id2.getLexema()); //acceso
+	String nombre1 = id1.getLexema(); //tipo
+	String nombre2 = id2.getLexema(); //acceso
 
 	SymbolIF symbol1=scopeManager.searchSymbol(nombre1); 	//comprueba si el primer simbolo es Tipo record y esta en un ambito alcanzable
 	if (symbol1==null) 
@@ -806,8 +809,8 @@ expAcceso ::= ID:id1 POINT ID:id2
 	TypeIF tipo1 = symbol1.getType(); //si tengo simbolo, compruebo el tipo
 	if (!(tipo1 instanceof TypeRecord)) 
 		semanticErrorManager.semanticFatalError(nombre1 + "no es del tipo registro" + id1.getLine() + id1.getColumn());
-
 	TypeRecord tipo1r = (TypeRecord) tipo1;
+
 	ScopeIF scope1=null;	
 	//WIP quizas solo en los scope abiertos.....
 	for (ScopeIF s : scopeManager.getAllScopes()) // busqueda en todos los scopes para encontrar la declaracion del tipo
@@ -825,48 +828,50 @@ expAcceso ::= ID:id1 POINT ID:id2
 
 	SymbolIF symbol= sTable1.getSymbol(nombre2); //cojo el segundo simbolo
 	if (!(symbol instanceof SymbolVariable)) 
-		semanticErrorManager.semanticFatalError(nombre2+" no es una variable." + id1.getLine() + id1.getColumn());
+		semanticErrorManager.semanticFatalError(nombre2+" no es una variable valida dentro del struct." + id1.getLine() + id1.getColumn());
 	
 	SymbolVariable sv = (SymbolVariable) symbol; //cast a SymbolVariable para poder operar
-	int offset = tipo1r.getOffset("nombre2"); //se recoje del primer campo
-	Variable var = new Variable(sv);
-	ExpAcceso ea = new ExpAcceso(nombre1, nombre2, new TypeSimpleInteger(scope), var, offset);
-	// WIP incluir desplazamiento relativo
-	
+	int offset = tipo1r.getOffset(nombre2); //se recoje del primer campo
+		//System.out.println("offset "+offset);
+	//Variable var = new Variable(sv);
+	SymbolVariable sG = (SymbolVariable) symbol1;
+	//sG.setOffset(offset);
+	ExpAcceso ea = new ExpAcceso(nombre1, nombre2, new TypeSimpleInteger(scope), sG, offset);
 	RESULT=ea;
-	
-	
-			
 		
 :} | ID:id1 POINT ID:id2 POINT ID:id3 {:
-	ScopeIF scope = scopeManager.getCurrentScope();
-	//int level=scope.getLevel();
+
 	String nombre1 = new String (id1.getLexema()); //tipo
 	String nombre2 = new String (id2.getLexema()); //acceso
 	String nombre3 = new String (id3.getLexema()); //acceso
 	
+	ScopeIF scope = scopeManager.getCurrentScope();
 	SymbolIF symbol1=scopeManager.searchSymbol(nombre1); 	//comprueba si el primer simbolo es Tipo record y esta en un ambito alcanzable
 	if (symbol1==null) 
 		semanticErrorManager.semanticFatalError("No es una variable valida para esa expresion de acceso." + id1.getLine() + id1.getColumn());
 	TypeIF tipo1 =symbol1.getType(); //comprueb el tipo
 	if (!(tipo1 instanceof TypeRecord)) //&& tipo2 instanceof TypeRecord)) 
 		semanticErrorManager.semanticFatalError(nombre1 + " no es del tipo registro" + id1.getLine() + id1.getColumn());
+	TypeRecord tipo1r = (TypeRecord) tipo1;
+	
+	//WIP solo tablas de tipos abiertas???
 	ScopeIF scope1=null;
 	for (ScopeIF s : scopeManager.getAllScopes())  // busqueda en todos los scopes para encontrar la declaracion del tipo
 		if(s.getName().equals(tipo1.getName()))
 			scope1 =s;
 	if(scope1.equals(null))
 		semanticErrorManager.semanticFatalError(nombre1+" no es un tipo declaradoZZZ " + id1.getLine() + id1.getColumn());
-	
+	//WIP solo tablas de tipos abiertas???
+
 	SymbolTableIF sTable1 = scope1.getSymbolTable(); //recojo su tabla de simbolos				
 	if(!sTable1.containsSymbol(nombre2)) 	//si la tabla no tiene el segundo simbolo y este no es de tipo record, salir
 		semanticErrorManager.semanticFatalError("No es del tipo o no se encuentra999 " + id1.getLine() + id1.getColumn());	
-	
 	if (!(sTable1.getSymbol(nombre2).getType() instanceof TypeRecord)) 
 		 semanticErrorManager.semanticFatalError(nombre2+" no es del tipo registro." + id1.getLine() + id1.getColumn());
 	
 	// Hasta que se comprueba que el nombre 2 es de tipo struct y pertenece a nombre1
 	//Ahora ver si nombre 3 esta en el ambito de nombre 2 y es int
+	//WIP solo tablas de tipos abiertas???
 	ScopeIF scope2=null;		
 	for (ScopeIF s : scopeManager.getAllScopes()) { // busqueda en todos los scopes para encontrar la declaracion del tipo
 		if(s.getName().equals(sTable1.getSymbol(nombre2).getType().getName()))
@@ -874,24 +879,34 @@ expAcceso ::= ID:id1 POINT ID:id2
 	}
 	if(scope2.equals(null))
 		semanticErrorManager.semanticFatalError(nombre2+" no es un tipo declaradoZZZ " + id1.getLine() + id1.getColumn());
-	
+	//WIP solo tablas de tipos abiertas???
+
 	SymbolTableIF sTable2 = scope2.getSymbolTable(); //recojo su tabla de simbolos	
-	
 	if(!sTable2.containsSymbol(nombre3)) 	//si la tabla no tiene el tercer simbolo y este no es de tipo int, salir
 		semanticErrorManager.semanticFatalError("No es del tipo o no se encuentra999 " + id1.getLine() + id1.getColumn());	
-				
 	if (!(sTable2.getSymbol(nombre3).getType() instanceof TypeSimpleInteger)) 
-		 semanticErrorManager.semanticFatalError(nombre1+" no es del tipo registro." + id1.getLine() + id1.getColumn());
-		
-	SymbolIF symbol= sTable2.getSymbol(nombre3);
-	if (!(symbol instanceof SymbolVariable)) 
+		semanticErrorManager.semanticFatalError(nombre3+" no es del tipo registro." + id1.getLine() + id1.getColumn());
+
+	SymbolIF symbol2= sTable1.getSymbol(nombre2); //coge el segundo
+	SymbolIF symbol3= sTable2.getSymbol(nombre3); //coge el tercero
+
+	TypeIF tipo2 =symbol2.getType(); //comprueb el tipo
+	if (!(tipo2 instanceof TypeRecord)) //&& tipo2 instanceof TypeRecord)) 
+		semanticErrorManager.semanticFatalError(nombre2 + " no es del tipo registro" + id1.getLine() + id1.getColumn());
+	TypeRecord tipo2r = (TypeRecord) tipo2;
+
+	if (!(symbol3 instanceof SymbolVariable)) 
 		semanticErrorManager.semanticFatalError(nombre3+" no es una variable." + id1.getLine() + id1.getColumn());
-	SymbolVariable sv = (SymbolVariable) symbol;
-	Variable var = new Variable(sv.getName(),sv.getScope());
-		
-	ExpAcceso ea= new ExpAcceso(nombre1,nombre2,nombre3,new TypeSimpleInteger(scope), var);	
+	SymbolVariable sv2 = (SymbolVariable) symbol2;
+	SymbolVariable sv3 = (SymbolVariable) symbol3;
 	
-		// WIP incluir desplazamiento relativo
+	int offset2 = tipo1r.getOffset(nombre2); //se recoge el offset del segundo campo
+	int offset3 = tipo2r.getOffset(nombre3); //se recoge el offset del tercer campo
+
+	//Variable var = new Variable(sv3);
+	SymbolVariable sG = (SymbolVariable) symbol1; //variable de primer tipo para pasar junto a el offset
+	//sG.setOffset(offset2+offset3);
+	ExpAcceso ea= new ExpAcceso(nombre1, nombre2, nombre3, new TypeSimpleInteger(scope), sG, (offset2+offset3));	
 	RESULT=ea;
 :} ;
 
@@ -912,44 +927,18 @@ expAsig ::= ID:id ASSIGMENT expLog:el
 	if (!(el.getType().getName().equals(tipo.getName()) )) 
 		semanticErrorManager.semanticFatalError("No coinciden los tipos en la asignación."+" Linea: "+id.getLine());
 	
-	
 	Expresion ea=new Expresion(tipo);
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
-	TemporalFactory tf = new TemporalFactory(scope);
-
-
-	TemporalIF idTemp = tf.create();
 	TemporalIF elTemp = el.getTemporal();
-	//TemporalIF idTempI = idTemp.getTemporalIndex();
-	//TemporalIF idTempO = idTemp.getTemporalOffset();
-	TemporalIF temp = tf.create();
-	
 	cb.addQuadruples(el.getIntermediateCode());
 	
-	if (symbol instanceof SymbolVariable) {
-		SymbolVariable sv = (SymbolVariable) symbol;
-		Variable var = new Variable(sv.getName(),sv.getScope());
-		cb.addQuadruple("MV", var, elTemp); //de temp de exp logica a la direccion de la variable
-		//cb.addQuadruple("MVA", idTemp, var); //temp es la direccion de var
-		//cb.addQuadruple("STP", idTemp, elTemp); //temp es la direccion de var
-	} else if (symbol instanceof SymbolParameter) {
-		SymbolParameter sv = (SymbolParameter) symbol;
-		Variable var = new Variable(sv.getName(),sv.getScope());
-		cb.addQuadruple("MV", var, elTemp);
-		//cb.addQuadruple("MVA", idTemp, var); //temp es la direccion de var
-		//cb.addQuadruple("STP", idTemp, elTemp); //temp es la direccion de var
-	}	
-
-	//cb.addQuadruple (“MUL”, temp, rTempI, rSize); 
-	//cb.addQuadruple (“ADD”, temp, temp, rTemp); 
-	//cb.addQuadruple (“ADD”, temp, temp, rTempO); 
-	//cb.addQuadruple (“STP”, temp, eTemp); 
-
-	//cb.addQuadruples(el.getIntermediateCode());
-			
-	//cb.addQuadruple("MVA", temp, new Variable(name, symbol.getScope()));
+	Variable var = null;
+	if (symbol instanceof SymbolVariable) 
+		var = new Variable((SymbolVariable) symbol);
+	else if (symbol instanceof SymbolParameter) 
+		var = new Variable((SymbolParameter) symbol);
 	
-	ea.setTemporal(temp);
+	cb.addQuadruple("MV", var, elTemp); //de temp de exp logica a la direccion de la variable
 	ea.setIntermediateCode(cb.create());
 	
 	RESULT=ea;	
@@ -957,12 +946,34 @@ expAsig ::= ID:id ASSIGMENT expLog:el
 :}
 | 
 expAcceso:ea ASSIGMENT:a expLog:el 
-//WIP añadir codigo intermedio
 {:
-	if (ea.getType().getName().equals(el.getType().getName()) )
-		RESULT= new Expresion(el.getType());
-	else
+	String name = ea.getName(); //recoge el nombre de la var exp acceso, lo necesito para el desplazamiento relativo
+	ScopeIF scope = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+	if (!(ea.getType().getName().equals(el.getType().getName()) ) )
 		semanticErrorManager.semanticFatalError("No coinciden los tipos en la asignación."+" Linea: "+a.getLine());
+		
+	SymbolIF symbol= scopeManager.searchSymbol(name);
+	if (!(symbol instanceof SymbolVariable || symbol instanceof SymbolParameter))
+		semanticErrorManager.semanticFatalError(name+" no es un nombre de variable o parametro previamente declarado o dentro de alcance."+" Linea: "+a.getLine()+" Columna: "+a.getColumn());
+
+	Expresion exp = new Expresion(el.getType());
+	TemporalIF elTemp = el.getTemporal(); //el temporal de la expresionLogica
+	int offset = ea.getOffset(); //cojo el desplazamiento
+	cb.addQuadruples(el.getIntermediateCode());
+	Variable var = null;
+		
+	if (symbol instanceof SymbolVariable) {
+		SymbolVariable sv = (SymbolVariable) symbol;
+		var = new Variable(sv);
+	} else if (symbol instanceof SymbolParameter) {
+		SymbolParameter sv = (SymbolParameter) symbol;
+		var = new Variable(sv);
+	}	
+	var.setOffset(offset);
+	cb.addQuadruple("MV", var, elTemp);	//mover el temp de explog a la direccion de la var de acceso mas desplazamiento
+	exp.setIntermediateCode(cb.create());	
+	RESULT = exp;
 :};
 			
 /**************************************************
@@ -977,7 +988,7 @@ expresion ::= expLog:el
 	RESULT =e;
 :}
  | expAsig:ea 
- {: 
+{: 
  	Expresion e= new Expresion (ea.getType());
 	e.setIntermediateCode(ea.getIntermediateCode());
 	TemporalIF temp = ea.getTemporal();
@@ -1093,23 +1104,23 @@ sentFor ::=  sentForA:sfa SEMICOLON //para el infinito
 	LabelFactoryIF lf = new LabelFactory (); 
 	LabelIF lab1 = lf.create (); 
 	LabelIF lab2 = lf.create (); 
-	Variable var=sfa.getVariable();
+	Variable var=new Variable (sfa.getVariable());
+	var.setOffset(sfa.getOffset());
 	ExpLog from=sfa.getFrom();
 	Expresion to=sfa.getTo();
 	Expresion inc=sfa.getInc();
 	TemporalIF eTemp = from.getTemporal (); //sacar el temporal de la expresion asignada
 	TemporalIF toTemp = to.getTemporal (); //sacar el temporal de la expresion asignada
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
-	//codigo de la asignacion
-	
+	//codigo de la asignacion. OK
+	cb.addQuadruples(from.getIntermediateCode()); 
 	cb.addQuadruple("MV", var, eTemp); //mover temporal de la drecha asignacion a la variable para almacenar su valor inicial
-	
 	cb.addQuadruple("INL", lab1); // empieza el bucle
 	cb.addQuadruples(to.getIntermediateCode()); //compruebo el codigo de hasta
-	cb.addQuadruple("BRT", toTemp, lab2);//si no es cierto salto a lab 2 y salgo !!!!!!!!!!!!!!!!!!!!
-	cb.addQuadruples(sen.getIntermediateCode()); //sie es cierto, añado la sentencia a todo el codigo
+	cb.addQuadruple("BRT", toTemp, lab2);//si condicion dos es cierto salto a lab 2 y salgo !!!!!!!!!!!!!!!!!!!!
+	cb.addQuadruples(sen.getIntermediateCode()); //si es cierto, añado la sentencia a todo el codigo
 	cb.addQuadruples(inc.getIntermediateCode()); //aplico el incremento
-	cb.addQuadruple("BRF", toTemp,  lab1); //vuevo a comenzar el bucle !!!!!!!!!!!!!!!!!
+	cb.addQuadruple("BRF", toTemp,  lab1); //comprubo condicion, si es falsa vuevo a comenzar el bucle !, si es verdadera sigo
 	cb.addQuadruple("INL", lab2); //salida del bucle
 	
 	senfor.setIntermediateCode(cb.create());
@@ -1119,38 +1130,25 @@ sentFor ::=  sentForA:sfa SEMICOLON //para el infinito
 :};
 			 
 sentForA ::= FOR OBRACKET ID:id ASSIGMENT expLog:elog SEMICOLON expresion:e1 SEMICOLON expresion:e2 CBRACKET //declaracion con un id
-// for (tipo=tipo2;tipo3;tipo4)
+// for (tipo=tipo2;tipo3;tipo4) OK
 {:
 	scopeManager.openScope();
 	ScopeIF scope = scopeManager.getCurrentScope();
-	//int level=scope.getLevel() -1; //buscar siempre en un nivel menos
 	String name= id.getLexema();
 	SymbolIF symbol = scopeManager.searchSymbol(name);
+	//WIP comprobar si es variable
 	TypeIF tipo1= symbol.getType(); // buscarTipoVariable(level, name);
-	
-	//TypeIF tipo1 = buscarTipoVariable(level,name);
+
 	if (tipo1==null)
 		semanticErrorManager.semanticFatalError("La variable "+name+" no ha sido declarado en ningun ambito previo."+" Linea: "+id.getLine()+" Columna: "+id.getColumn());
-	TypeIF tipo2= elog.getType();
-	TypeIF tipo3= e1.getType();
-	TypeIF tipo4= e2.getType();
+	TypeIF tipo2= elog.getType(); TypeIF tipo3= e1.getType(); TypeIF tipo4= e2.getType();
 	
 	if (!(tipo1 instanceof TypeSimpleInteger && tipo2 instanceof TypeSimpleInteger &&
-	    tipo3 instanceof TypeSimpleInteger && tipo4 instanceof TypeSimpleInteger)) 
+	    tipo3 instanceof TypeSimpleInteger && tipo4 instanceof TypeSimpleInteger)) 		//Todos los tipos son validos
 		semanticErrorManager.semanticFatalError("Las declaraciones de la sentencia for no son del tipo adecuado."+" Linea: "+id.getLine()+" Columna: "+id.getColumn());
 	
-		//Todos los tipos son validos
-		
-	TemporalIF eTemp = elog.getTemporal (); //sacar el temporal de la expresion asignada
-
-	Variable var = new Variable(name, scope);
-	
-	//List<QuadrupleIF> from = elog.getIntermediateCode(); //revisar
-	//QuadrupleIF asig = ; //el valor de temporal a la variable
-	//from.add(new Quadruple("MV", var, eTemp)); //añade la linea de asignacion
-	//List<QuadrupleIF> to = e1.getIntermediateCode();
-	//List<QuadrupleIF> inc = e2.getIntermediateCode();
-	
+	//TemporalIF eTemp = elog.getTemporal (); //sacar el temporal de la expresion asignada
+	SymbolVariable var = (SymbolVariable)symbol;
 	SentForA senfor = new SentForA(var, elog, e1, e2);	
 	RESULT =senfor ;
 :}
@@ -1159,21 +1157,17 @@ sentForA ::= FOR OBRACKET ID:id ASSIGMENT expLog:elog SEMICOLON expresion:e1 SEM
 {:
 	scopeManager.openScope();
 	ScopeIF scope = scopeManager.getCurrentScope();
-	TypeIF tipo1 = eac.getType() ;
-	TypeIF tipo2= elog.getType();
-	TypeIF tipo3= e1.getType();
-	TypeIF tipo4= e2.getType();
+	TypeIF tipo1 = eac.getType() ;	TypeIF tipo2= elog.getType();
+	TypeIF tipo3= e1.getType();	TypeIF tipo4= e2.getType();
 	
 	if (!(tipo1 instanceof TypeSimpleInteger && tipo2 instanceof TypeSimpleInteger &&
-	    tipo3 instanceof TypeSimpleInteger && tipo4 instanceof TypeSimpleInteger)) 
+	    tipo3 instanceof TypeSimpleInteger && tipo4 instanceof TypeSimpleInteger)) //Todos los tipos son validos
 		semanticErrorManager.semanticFatalError("Las declaraciones de la sentencia for no son del tipo adecuado."+" Linea: "+id.getLine()+" Columna: "+id.getColumn());
+
+	SymbolVariable var= eac.getVariable(); //debe ser mejorado
 	
-	//SentForA senfor=new SentForA();		//Todos los tipos son validos
-	Variable var= eac.getVariable();
-	SentForA senfor = new SentForA(var, elog, e1, e2);	
-		
-	//IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
-	//SentForA senfor = new SentForA(from, to, inc);	
+	SentForA senfor = new SentForA(var, elog, e1, e2, eac.getOffset());	
+	
 	RESULT =senfor ;
 :};			 			 
 

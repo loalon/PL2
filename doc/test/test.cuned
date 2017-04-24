@@ -4,30 +4,61 @@
 #define FALSE 0;
 #define UNO 1;
 
+struct Coordenada {
+	int x;
+	int y;
+} 
+
 struct Cuadrado {
-	int cX;
-	int cY;
+	Coordenada SI;
+	Coordenada SD;
+	Coordenada II;
+	Coordenada ID;
 }
 
 int a;
 
 Cuadrado cuadrado, cuad, cosa;
 
+Coordenada cod;
 
 void main () {
-	
+for (a=30; a==25; a=a-1) {
+	printi(a);
+}
+
+for (cod.y=5; cod.y==0; cod.y=cod.y-1) {
+	printi(cod.y);
+}
+
+
+for (cuadrado.II.x=20; cuadrado.II.x==15; cuadrado.II.x=cuadrado.II.x-1) {
+	printi(cuadrado.II.x);
+}
+
+	cuadrado.SI.x=55;
+	cuadrado.SI.y=66;
+	cuadrado.SD.x=77;
+	cuadrado.SD.y=88;
+
+	printi(cuadrado.SI.x);
+	printi(cuadrado.SI.y);
+	printi(cuadrado.SD.x);
+	printi(cuadrado.SD.y);
+
+
 	a=3-1;
+
 	if(a==2) {
 		printc("correcto");
-	}
-else {
+	} else {
 		printc("incorrecto");
 	}
-	/*
+	
 	printc("CONSTANTES");
 	printc("uno(1):");
-        printi(UNO);
-        printi(a);
-        */
+    printi(UNO);
+    printi(a);
+        
 
 }

@@ -29,14 +29,16 @@ public class TranslatorEQ extends Translator{
 		Temporal op2 = (Temporal)quadruple.getSecondOperand();
 		
 		temporal.append("CMP #-"+op1.getAddress()+"[.IX], #-"+op2.getAddress()+"[.IX]\n"); // CMP #-2[.IX], #-4[.IX]
-		temporal.append("BZ /"+labelF+"\n");
-		temporal.append("MOVE #1, .A"+"\n"); //guarda true en el acumulador 
-		temporal.append("BR /"+labelT+"\n"); //salto a la etiqueta verdadera
-		temporal.append(labelF+":"+"\n"); //etiqueta si falso
-		temporal.append("MOVE #0, .A"+"\n"); //guarda false en el acumulador
+		temporal.append("BZ /"+labelT+"\n"); //si son iguales z=1 y salta
+		//temporal.append("BR /"+labelT+"\n"); //salto a la etiqueta verdadera
+		temporal.append("MOVE #0, #-"+result.getAddress()+"[.IX]\n"); //guarda en el temporal 0 por ser falso
+		temporal.append("BR /"+labelF+"\n"); //salto a la etiqueta falso
+		//temporal.append("MOVE #0, .A"+"\n"); //guarda false en el acumulador
 		temporal.append(labelT+":"+"\n"); //etiqueta si verdadero
-		temporal.append("MOVE .A, #-"+result.getAddress()+"[.IX]"); //guarda en el temporal
-		
+		temporal.append("MOVE #1, #-"+result.getAddress()+"[.IX]\n"); //guarda en el temporal 1 por ser verdad
+		//temporal.append("MOVE #1, .A"+"\n"); //guarda true en el acumulador
+		//temporal.append("MOVE .A, #-"+result.getAddress()+"[.IX]"); //guarda en el temporal
+		temporal.append(labelF+":"+"\n"); //etiqueta si falso		
 		return temporal.toString();
 	}
 }

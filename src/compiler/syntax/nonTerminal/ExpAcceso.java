@@ -1,6 +1,7 @@
 package compiler.syntax.nonTerminal;
 
 import compiler.intermediate.Variable;
+import compiler.semantic.symbol.SymbolVariable;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class ExpAcceso extends NonTerminal {
@@ -9,7 +10,7 @@ public class ExpAcceso extends NonTerminal {
 	private String s1;
 	private String s2;
 	private String s3;
-	private Variable var;
+	private SymbolVariable var=null;
 	private int offset;
 	
 	public ExpAcceso () {
@@ -19,34 +20,39 @@ public class ExpAcceso extends NonTerminal {
 		this();
 		this.tipo=tipo;
 	}
-	public ExpAcceso (String s1, String s2, TypeIF tipo, Variable var) {
+	public ExpAcceso (String s1, String s2, TypeIF tipo, SymbolVariable var) {
 		this();
 		this.s1=s1;
 		this.s2=s2;
 		this.tipo=tipo;
 		this.var=var;
 	}
-	public ExpAcceso (String s1, String s2, TypeIF tipo, Variable var, int offset) {
+	public ExpAcceso (String s1, String s2, TypeIF tipo, SymbolVariable var, int offset) {
 		this(s1,s2,tipo,var);
 		this.offset=offset;
 	}
 	
-	public ExpAcceso (String s1, String s2, String s3, TypeIF tipo, Variable var) {
+	public ExpAcceso (String s1, String s2, String s3, TypeIF tipo, SymbolVariable var) {
 		this(s1,s2,tipo,var);
 		this.s3=s3;
 	}
-	public ExpAcceso (String s1, String s2, String s3, TypeIF tipo, Variable var, int offset) {
+	public ExpAcceso (String s1, String s2, String s3, TypeIF tipo, SymbolVariable var, int offset) {
 		this(s1,s2,s3,tipo,var);
 		this.offset=offset;
 	}
 	public TypeIF getType () {
 		return tipo;
 	}
-	public Variable getVariable() {
+	//WIP eliminaremos esto
+	public SymbolVariable getVariable() {
 		return var;
 	}
+	
 	public int getOffset() {
 		return offset;
+	}
+	public String getName() {
+		return s1;
 	}
 	//public set ()
 	

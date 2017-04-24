@@ -14,8 +14,8 @@ public class TranslatorBRT extends Translator{
 		Temporal result = (Temporal)quadruple.getResult(); //temporal para comprobar si es falso
 		Label op1 = (Label)quadruple.getFirstOperand(); // salta si es falso
 		
-		temporal.append("CMP #-"+result.getAddress()+"[.IX], #1\n"); // CMP #-2[.IX], 1 . compara con 0
-		temporal.append("BNZ /"+op1+"\n"); //solo si z=0, comparacion verdadera. si z=0 significa que result es verdad
+		temporal.append("CMP #-"+result.getAddress()+"[.IX], #1\n"); // CMP #-2[.IX], 1 . compara con 1
+		temporal.append("BZ /"+op1+"\n"); //solo si z=1, comparacion verdadera. si z=1 significa que CMP son iguales
 		return  temporal.toString();
 	}
 }

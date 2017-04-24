@@ -76,7 +76,9 @@ public class TypeRecord extends TypeBase
     	this.size=size;
     }
     public int getOffset(String name){ //para una variable, devuelve su desplazamiento
-    	return offset.get(name);
+    	return (int) offset.get(name);
+    	//System.out.println(offset.toString());
+    	//return 14;
     }
     /**
      * Returns the size of the type.

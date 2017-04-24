@@ -8,12 +8,9 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
  * Class for SymbolVariable.
  */
 
-// TODO: Student work
-//       Include properties to characterize variables
-
 public class SymbolVariable extends SymbolBase
 {  
-	private int address;
+	private int address=0;
 	//private ScopeIF scope;
 	//private TypeIF type;
 	//private String name;
@@ -25,13 +22,12 @@ public class SymbolVariable extends SymbolBase
      */
     public SymbolVariable (ScopeIF scope, String name, TypeIF type) {
         super (scope, name, type);
-        
     } 
-    public Integer getAddress() {
+    
+    public int getAddress() {
 		return address;
 	}
 	public void setAddress(int address) {
 		this.address = address;
 	} 
-	
 }

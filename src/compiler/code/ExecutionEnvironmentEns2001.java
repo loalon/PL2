@@ -125,6 +125,8 @@ public class ExecutionEnvironmentEns2001
 				translator = new TranslatorNADA(); break;
 			case "OR":
     			translator = new TranslatorOR(); break;
+			case "ORG":
+    			translator = new TranslatorORG(); break;
 			case "PARAM":
 				translator = new TranslatorPARAM(); break;    			
 			case "PRINT":

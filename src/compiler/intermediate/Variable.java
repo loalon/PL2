@@ -12,13 +12,14 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class Variable  implements VariableIF 
 {
-    private String  name     = null;
-    private ScopeIF scope    = null;
+    private String  name = null;
+    private ScopeIF scope = null;
     private TypeIF type = null;
-	//private SymbolVariable  sv;
-	//private SymbolParameter sp;
+	private SymbolVariable  sv;
+	private SymbolParameter sp;
 	private boolean isParameter = false;
-    private int address;
+    private int address=0;
+    private int offset=0;
     /**
      * Constructor for Variable.
      * @param name The name.
@@ -40,12 +41,14 @@ public class Variable  implements VariableIF
     {
     	this(sv.getName(), sv.getScope(), sv.getType());
     	this.address=sv.getAddress();
+    	this.sv=sv;
     
     }
     public Variable(SymbolParameter sp)
     {
     	this(sp.getName(), sp.getScope(), sp.getType());
     	this.address=sp.getAddress();
+    	this.sp=sp;
     	this.isParameter=true;//quizas no necesario
     
     }
@@ -79,13 +82,23 @@ public class Variable  implements VariableIF
      */
     @Override
     public final int getAddress () {
-    	return address;
-    	/*
+        
     	if(isParameter)
-    		return sp.getAddress();
+    		return sp.getAddress()+offset;
         else
-        	return sv.getAddress();
-    */
+        	return sv.getAddress()+offset;
+  
+    }
+    public void setAddress (int address) {
+    	    	
+    	if(isParameter)
+    		sp.setAddress(address);
+        else
+        	sv.setAddress(address);
+    
+    }
+    public void setOffset (int offset) {
+    	this.offset=offset;
     }
 
     /**
