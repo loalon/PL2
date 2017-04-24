@@ -16,6 +16,7 @@ public class SymbolFunction  extends SymbolProcedure
 	//private TypeIF type;
 	//private String name;
 	//private int numeroParametros;
+	private int size;
     /**
      * Constructor for SymbolFunction.
      * @param scope The declaration scope.

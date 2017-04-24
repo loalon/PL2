@@ -6,6 +6,9 @@ public class TranslatorCALL extends Translator{
 	
 	@Override
 	protected String translate(QuadrupleIF quadruple) {
+		
+//Registro de activacion		
+		
 		return  ("BR /"+ quadruple.getResult().toString());
 	}
 }

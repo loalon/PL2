@@ -21,20 +21,21 @@ public class TranslatorMV extends Translator {
 		if(result instanceof Temporal && op1 instanceof Value) {
 			Value from = (Value) op1;
 			Temporal to = (Temporal) result;
-			temporal.append("MOVE #"+ from.getValue() +", #-"+to.getAddress()+"[.IX]");  
+			temporal.append("MOVE #"+ from.getValue() +", #-"+to.getAddress()+"[.IY]");  
 		}
 	
 		//caso 2 mover temporal a una variable
 		if(result instanceof Variable && op1 instanceof Temporal) {
 			Temporal from = (Temporal) op1;
 			Variable to = (Variable) result;
-			temporal.append("MOVE #-"+ from.getAddress()+"[.IX], /"+to.getAddress());  
+			
+			temporal.append("MOVE #-"+ from.getAddress()+"[.IY], /"+to.getAddress());  
 		}
 		//caso 3 mover variable a un temporal (para imprimir por ejemplo)
 		if(result instanceof Temporal && op1 instanceof Variable) {
 			Variable from = (Variable) op1;
 			Temporal to = (Temporal) result;
-			temporal.append("MOVE /"+ from.getAddress()+", #-"+to.getAddress()+"[.IX]");  
+			temporal.append("MOVE /"+ from.getAddress()+", #-"+to.getAddress()+"[.IY]");  
 		}
 		// caso 4 copiar una variable en una nueva variable 
 

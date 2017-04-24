@@ -23,18 +23,23 @@ Cuadrado cuadrado, cuad, cosa;
 Coordenada cod;
 
 void main () {
-for (a=30; a==25; a=a-1) {
-	printi(a);
-}
 
-for (cod.y=5; cod.y==0; cod.y=cod.y-1) {
-	printi(cod.y);
-}
-
-
-for (cuadrado.II.x=20; cuadrado.II.x==15; cuadrado.II.x=cuadrado.II.x-1) {
-	printi(cuadrado.II.x);
-}
+	int uno;
+	int dos;
+	int tres;
+	
+	for (a=30; a==25; a=a-1) {
+		printi(a);
+	}
+	
+	for (cod.y=5; cod.y==0; cod.y=cod.y-1) {
+		printi(cod.y);
+	}
+	
+	
+	for (cuadrado.II.x=20; cuadrado.II.x==15; cuadrado.II.x=cuadrado.II.x-1) {
+		printi(cuadrado.II.x);
+	}
 
 	cuadrado.SI.x=55;
 	cuadrado.SI.y=66;

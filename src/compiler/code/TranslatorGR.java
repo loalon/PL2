@@ -29,14 +29,14 @@ public class TranslatorGR extends Translator{
 		Temporal op1 = (Temporal)quadruple.getFirstOperand();
 		Temporal op2 = (Temporal)quadruple.getSecondOperand();
 		
-		temporal.append("CMP #-"+op1.getAddress()+"[.IX], #-"+op2.getAddress()+"[.IX]\n"); // GR #-2[.IX], #-4[.IX] //op1>op2
+		temporal.append("CMP #-"+op1.getAddress()+"[.IY], #-"+op2.getAddress()+"[.IY]\n"); // GR #-2[.IX], #-4[.IX] //op1>op2
 		temporal.append("BP /"+labelF+"\n"); //si es verdad biestable S=0, salta a labelT
-		temporal.append("MOVE #0, #-"+result.getAddress()+"[.IX]\n"); //sino guarda false en el acumulador
+		temporal.append("MOVE #0, #-"+result.getAddress()+"[.IY]\n"); //sino guarda false en el acumulador
 		temporal.append("BR /"+labelF+"\n"); //salto a la etiqueta falsa
 		temporal.append("BR /"+labelT+"\n"); //salto a la etiqueta verdadera
 		temporal.append(labelT+":"); //etiqueta si verdadero
 		//temporal.append("MOVE .A, #-"+result.getAddress()+"[.IX]"); //guarda en el temporal
-		temporal.append("MOVE #1, #-"+result.getAddress()+"[.IX]\n"); //guarda true en el acumulador 
+		temporal.append("MOVE #1, #-"+result.getAddress()+"[.IY]\n"); //guarda true en el acumulador 
 		temporal.append(labelF+":"+"\n"); //etiqueta si falso
 		return temporal.toString();
 	}

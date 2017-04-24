@@ -47,7 +47,7 @@ public class TranslatorPRINT extends Translator{
 		}
 		if (result instanceof Temporal) {
 			Temporal var = (Temporal) result;
-			temporal.append("WRINT #-"+var.getAddress()+"[.IX]\n"); //hago referencia a la etiqueta
+			temporal.append("WRINT #-"+var.getAddress()+"[.IY]\n"); //hago referencia a la etiqueta
 			temporal.append("WRCHAR #10"); 
 		
 		}

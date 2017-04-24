@@ -10,7 +10,7 @@ public class TranslatorORG extends Translator{
 	@Override
 	protected String translate(QuadrupleIF quadruple) {
 		temporal.append("ORG "+ quadruple.getResult().toString()+"\n");
-		temporal.append("MOVE #65000, .IX");
+
 		
 		return  temporal.toString();
 	}
