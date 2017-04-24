@@ -20,6 +20,7 @@ public class Variable  implements VariableIF
 	private boolean isParameter = false;
     private int address=0;
     private int offset=0;
+    private boolean isGlobal=false;
     /**
      * Constructor for Variable.
      * @param name The name.
@@ -108,8 +109,7 @@ public class Variable  implements VariableIF
     @Override
     public final boolean isGlobal ()
     {
-        // TODO : Student Work
-        return true;
+        return isGlobal;
     }
 
     /**

@@ -36,7 +36,7 @@ public class TranslatorMV extends Translator {
 			Temporal to = (Temporal) result;
 			temporal.append("MOVE /"+ from.getAddress()+", #-"+to.getAddress()+"[.IX]");  
 		}
-		// caso 4 muevo un temp a una variable con desplazamiento relativo
+		// caso 4 copiar una variable en una nueva variable 
 
 		return temporal.toString();
 	}

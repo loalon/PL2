@@ -200,22 +200,16 @@ program ::=
 	
 	System.out.println("tamaño strings " +stringsSize);
 	System.out.println("tamaño vars " +gAddress);
-	cb.addQuadruple("BR", new Value(gAddress)); // instrucciones al arrancar, le paso tamaño global y strings
+	//cb.addQuadruple("BR", new Value(gAddress)); // instrucciones al arrancar, le paso tamaño global y strings
+	// WIP poenr una instruccion STAR que incluya el ORG, el MOVe, etc
 	cb.addQuadruple("ORG", new Value(gAddress)); // instrucciones al arrancar, le paso tamaño global y strings
 	cb.addQuadruple("PRINT", new Value(1234));
 	//reservo para las globales con ORG gAddress 
 
-
-
-	
 	//reservo para los strings con ORG stringsSize
-	
 	//pila, monton, etc
-	
 	//debe comenzar con IR A MAIN
-	
 	//BR /L_MAIN
-			
 	cb.addQuadruples(ax.getIntermediateCode());
 	cb.addQuadruple("HALT"); //ultima instruccion del programa
 	// instrucciones al acabar
@@ -633,10 +627,8 @@ expLog ::= expLog:e1 operador:op expLog:e2 //operacion
 	    		TypeSimpleInteger t1 = (TypeSimpleInteger) tipo1;
 	    		TypeSimpleInteger t2 = (TypeSimpleInteger) tipo2;
 	    	
-	    		if (t1.esBool() && t2.esBool()) {
-		    		//deberia evaluar si es 0 o 1 y devolver 0 o 1
-		    		ExpLog e = new ExpLog(new TypeSimpleInteger(scope,true)); //lo añade como bool
-		    		//e.setBool(true);
+	    		if (t1.esBool() && t2.esBool()) { //deberia evaluar si es 0 o 1 y devolver 0 o 1
+		    		ExpLog e = new ExpLog(new TypeSimpleInteger(scope ,true)); //lo añade como bool
 		    		cb.addQuadruple ("OR", temp, temp1, temp2); 
 		    		e.setTemporal (temp); 
 		    		e.setIntermediateCode (cb.create()); 
@@ -646,8 +638,7 @@ expLog ::= expLog:e1 operador:op expLog:e2 //operacion
 		   	} else
 	    		semanticErrorManager.semanticFatalError("La operacion OR debe comparar dos bool : ");	
 	    case "MORE":  
-	    	if (tipo1 instanceof TypeSimpleInteger && tipo2 instanceof TypeSimpleInteger ) {
-	    	//deberia devolver 0 o 1
+	    	if (tipo1 instanceof TypeSimpleInteger && tipo2 instanceof TypeSimpleInteger ) { 	    	//deberia devolver 0 o 1
 	    		//e.setType(new TypeSimpleBool(scope));
 	    		ExpLog e = new ExpLog(new TypeSimpleInteger(scope,true)); //lo añade como bool
 	    		//e.setBool(true);
