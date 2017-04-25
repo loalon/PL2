@@ -6,6 +6,6 @@ public class TranslatorHALT extends Translator{
 	
 	@Override
 	protected String translate(QuadrupleIF quadruple) {
-		return ("HALT");
+		return ("HALT"+"\n");
 	}
 }

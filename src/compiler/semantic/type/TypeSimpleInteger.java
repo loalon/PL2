@@ -19,7 +19,9 @@ public class TypeSimpleInteger extends TypeSimple
     public boolean esBool() {
     	return esBool;
     }
+    /*
     public void setBool(boolean esBool) {
     	this.esBool=esBool;
-    }
+    }*/
+    
 }

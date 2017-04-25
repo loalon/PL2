@@ -14,7 +14,7 @@ import es.uned.lsi.compiler.semantic.symbol.SymbolIF;
 
 public class TranslatorCALL extends Translator{
 	
-	StringBuilder temporal=new StringBuilder();
+	//StringBuilder temporal=new StringBuilder();
 	
 	@Override
 	protected String translate(QuadrupleIF quadruple) {
@@ -53,7 +53,7 @@ public class TranslatorCALL extends Translator{
 		}
 		//}
 		//temporal.append("SUB .SP, #1\n"); // almaceno el valor de .SP
-		temporal.append("MOVE .SP, .R4\n"); // almacena el valor de .SP en .R4 //puntero antes de la llamada
+		temporal.append("MOVE .SP, .R4\n"); // puntero de pila antes de la llamada, aqui volvera al cerrar RA
 		temporal.append("MOVE .IX, .R5\n"); // almacena el valor de .IX en .R5 //guarda el enlace de control
 		//añmacena la direccion del RA anterior, del llamador
 		temporal.append("MOVE .IY, .R6\n"); // almacena el valor de .SP en .R6 //puntero de heap antes de llamada (se debe volver a el)
@@ -61,7 +61,7 @@ public class TranslatorCALL extends Translator{
 		temporal.append("MOVE .PC, .R7\n"); // almacena el valor de .PC en .R7 //puntero de heap antes de llamada (se debe volver a el)
 		//temporal.append("MOVE .SP, .IX\n"); // almaceno el valor de .SP en .IX, esta es la referencia del RA
 		temporal.append("MOVE .SP, .IX\n"); // almaceno el valor de .SP en .IX, esta es la referencia del RA
-		temporal.append("ADD #"+(varSize+7)+", .IX\n"); //iX+7+tamaño variables dan la posicion de IY
+		temporal.append("ADD #"+(varSize+SIZE_RA)+", .IX\n"); //iX+7+tamaño variables dan la posicion de IY
 		temporal.append("MOVE .A, .IY\n");
 		temporal.append("ADD #"+(tempSize)+", .IY\n"); 
 		temporal.append("MOVE .A, .R3\n"); //puntero de pila al final de los temporales

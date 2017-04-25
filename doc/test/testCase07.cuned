@@ -9,7 +9,7 @@ void main () {
         a=1 || 1;
         printc("true:");
 
-        if (a || 1) {
+        if (1 || 1) {
                 printc(" true");
 	}
         else {
@@ -20,8 +20,8 @@ void main () {
         
 	a=0 || 0;
         printc("false:");
-        if (a || 0) {
-                printc(" true");
+        if (1 || 0) {
+                printc(" patata true"); /*esta erroneo*/
 	}
         else {
                 printc(" false");

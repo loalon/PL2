@@ -6,7 +6,7 @@ import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 
 public class TranslatorBRT extends Translator{
 	
-	StringBuilder temporal=new StringBuilder();
+	//StringBuilder temporal=new StringBuilder();
 	
 	@Override
 	protected String translate(QuadrupleIF quadruple) {

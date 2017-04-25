@@ -6,6 +6,6 @@ public class TranslatorINL extends Translator{
 	
 	@Override
 	protected String translate(QuadrupleIF quadruple) {
-		return  (""+quadruple.getResult()+":");
+		return  (""+quadruple.getResult()+":"+"\n");
 	}
 }

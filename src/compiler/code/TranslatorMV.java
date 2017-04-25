@@ -8,7 +8,7 @@ import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 
 public class TranslatorMV extends Translator {
 	
-	StringBuilder temporal=new StringBuilder();
+
 	
 	@Override
 	protected String translate(QuadrupleIF quadruple) {
@@ -34,7 +34,7 @@ public class TranslatorMV extends Translator {
 			if(to.getScope().getLevel()==0) //scope global
 				temporal.append("MOVE #"+ from.getAddress()+"[.IY], /"+to.getAddress()+"\n"); //se mueve a la direccion global reservada
 			else {
-				temporal.append("ADD #7, .IX\n"); //la septima posicion desde Ix comienza a guardar var locales
+				temporal.append("ADD #"+SIZE_RA+", .IX\n"); //la septima posicion desde Ix comienza a guardar var locales
 				temporal.append("MOVE .A, .R3\n"); //el resultado al registro temporal R3
 				temporal.append("ADD .R3, #"+to.getAddress()+"\n"); //a R3 le sumo el offset de la variable
 				temporal.append("MOVE #"+ from.getAddress()+"[.IY], [.A]\n"); //el temporal se mueve del heap a la direccion referenciada por A
@@ -51,10 +51,10 @@ public class TranslatorMV extends Translator {
 			if(from.getScope().getLevel()==0) //scope global
 				temporal.append("MOVE /"+ from.getAddress()+", #-"+to.getAddress()+"[.IY]");  
 			else {
-				temporal.append("ADD #7, .IX\n"); //la septima posicion desde Ix comienza a guardar var locales
+				temporal.append("ADD #"+SIZE_RA+", .IX\n"); //la septima posicion desde Ix comienza a guardar var locales
 				temporal.append("MOVE .A, .R3\n"); //el resultado al registro temporal R3
 				temporal.append("ADD .R3, #"+from.getAddress()+"\n"); //a R3 le sumo el offset de la variable
-				temporal.append("MOVE [.A], #"+to.getAddress()+"[.IY]"); 
+				temporal.append("MOVE [.A], #"+to.getAddress()+"[.IY]\n"); 
 				//temporal.append("DEC .R8\n");	
 				
 			}
