@@ -15,8 +15,8 @@ public class TranslatorOR extends Translator {
 		Temporal op1 = (Temporal)quadruple.getFirstOperand();
 		Temporal op2 = (Temporal)quadruple.getSecondOperand();
 		
-		temporal.append("OR #-"+op1.getAddress()+"[.IY], #-"+op2.getAddress()+"[.IY]\n"); // SUB #-2[.IX], #-4[.IX]
-		temporal.append("MOVE .A, #-"+result.getAddress()+"[.IY]"); //MOVE .A, #-5[.IX]
+		temporal.append("OR #"+op1.getAddress()+"[.IY], #"+op2.getAddress()+"[.IY]\n"); // SUB #-2[.IX], #-4[.IX]
+		temporal.append("MOVE .A, #"+result.getAddress()+"[.IY]"); //MOVE .A, #-5[.IX]
 
 		return temporal.toString();
 	}

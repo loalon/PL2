@@ -21,21 +21,45 @@ public class TranslatorMV extends Translator {
 		if(result instanceof Temporal && op1 instanceof Value) {
 			Value from = (Value) op1;
 			Temporal to = (Temporal) result;
-			temporal.append("MOVE #"+ from.getValue() +", #-"+to.getAddress()+"[.IY]");  
+			temporal.append("MOVE #"+ from.getValue() +", #"+to.getAddress()+"[.IY]\n");  
+			//temporal.append("DEC .R8\n");
+			//temporal.append("DEC .R8\n");
 		}
 	
 		//caso 2 mover temporal a una variable
 		if(result instanceof Variable && op1 instanceof Temporal) {
 			Temporal from = (Temporal) op1;
 			Variable to = (Variable) result;
+			//es global?
+			if(to.getScope().getLevel()==0) //scope global
+				temporal.append("MOVE #"+ from.getAddress()+"[.IY], /"+to.getAddress()+"\n"); //se mueve a la direccion global reservada
+			else {
+				temporal.append("ADD #7, .IX\n"); //la septima posicion desde Ix comienza a guardar var locales
+				temporal.append("MOVE .A, .R3\n"); //el resultado al registro temporal R3
+				temporal.append("ADD .R3, #"+to.getAddress()+"\n"); //a R3 le sumo el offset de la variable
+				temporal.append("MOVE #"+ from.getAddress()+"[.IY], [.A]\n"); //el temporal se mueve del heap a la direccion referenciada por A
+			}
+			//es local??
+			//es glocal?
 			
-			temporal.append("MOVE #-"+ from.getAddress()+"[.IY], /"+to.getAddress());  
+			
 		}
 		//caso 3 mover variable a un temporal (para imprimir por ejemplo)
 		if(result instanceof Temporal && op1 instanceof Variable) {
 			Variable from = (Variable) op1;
 			Temporal to = (Temporal) result;
-			temporal.append("MOVE /"+ from.getAddress()+", #-"+to.getAddress()+"[.IY]");  
+			if(from.getScope().getLevel()==0) //scope global
+				temporal.append("MOVE /"+ from.getAddress()+", #-"+to.getAddress()+"[.IY]");  
+			else {
+				temporal.append("ADD #7, .IX\n"); //la septima posicion desde Ix comienza a guardar var locales
+				temporal.append("MOVE .A, .R3\n"); //el resultado al registro temporal R3
+				temporal.append("ADD .R3, #"+from.getAddress()+"\n"); //a R3 le sumo el offset de la variable
+				temporal.append("MOVE [.A], #"+to.getAddress()+"[.IY]"); 
+				//temporal.append("DEC .R8\n");	
+				
+			}
+			
+			// 
 		}
 		// caso 4 copiar una variable en una nueva variable 
 

@@ -12,7 +12,7 @@ public class TranslatorBRF extends Translator{
 		
 		Temporal result = (Temporal)quadruple.getResult(); //temporal para comprobar si es falso
 		Label op1 = (Label)quadruple.getFirstOperand(); // salta si es falso
-		temporal.append("CMP #-"+result.getAddress()+"[.IY], #0\n"); // CMP #-2[.IX], 0 . compara con 0
+		temporal.append("CMP #"+result.getAddress()+"[.IY], #0\n"); // CMP #-2[.IX], 0 . compara con 0
 		temporal.append("BZ /"+op1+"\n"); //solo si z=1, significa que CMP son iguales
 		return  temporal.toString();
 	}

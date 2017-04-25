@@ -1,12 +1,33 @@
 package compiler.code;
 
+import compiler.intermediate.Temporal;
 import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 
 public class TranslatorRET extends Translator {
-
+	
+	StringBuilder temporal=new StringBuilder();
+	
 	@Override
 	protected String translate(QuadrupleIF quadruple) {
 		
+		Temporal result = (Temporal)quadruple.getResult();
+		if (!(result==null)) {
+			
+			//el valor de R9 tiene que pasar al temporal
+			temporal.append("MOVE #"+result.getAddress()+"[.IY], .R9\n"); //almacena valor en R9
+			//setInstruction("INC .R0");
+			//setInstruction(String.format("%s #-%s[.IX], [.R0]", "MOVE", op1.getAddress()));	
+		} else {
+			temporal.append("MOVE #0, .R9\n"); //si no tiene que retornar nada, R9 a cero, por si acaso
+		}
+		temporal.append("RET\n"); // recupera PC y continua
+		
+		//si temporal nulo
+		//mete un 0 en la casilla 9
+		//siempre acaba con RET
+		//temporal.append("MOVE #-"+result.getAddress()+".SP\n"); // PUSH #-2[.IX] inserta en la cima de la pila
+		//temporal.append("PUSH #-"+result.getAddress()+".SP\n"); // PUSH #-2[.IX] inserta en la cima de la pila
+
 		
 		/*
 		 * 
@@ -30,7 +51,7 @@ public class TranslatorRET extends Translator {
 		// - BR [.PC]
 		setInstruction("RET");
 		 */
-		return  ("RET");
+		return  temporal.toString();
 	}
 
 }

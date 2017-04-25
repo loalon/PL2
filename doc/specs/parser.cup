@@ -218,10 +218,16 @@ program ::=
 	LabelIF label = lf.create();
 	cb.addQuadruple("BR", label); // debe ir directo a main
 	cb.addQuadruples(ax.getIntermediateCode()); //todo el codigo
+	
+	//Variable fun = new Variable("main", scope);
+	//cb.addQuadruple("CALL", fun, 0); // debe ir directo a main
+	
 	cb.addQuadruple("HALT"); //ultima instruccion del programa
 	cb.addQuadruple("INL", label); // etiqueta HALT desde aqui son dos pasos mas hasta el fin de zona codigo
 	cb.addQuadruple("START", new Value(gAddress+stringsSize)); // instrucciones al arrancar, le paso tamaño global y strings
 	cb.addQuadruple("BR", new Value("L_MAIN")); // debe ir directo a main
+	//Variable fun = new Variable("main", scope);
+	//cb.addQuadruple("CALL", fun, 0); // debe ir directo a main
 	ax.setIntermediateCode(cb.create());
 	
 	for(QuadrupleIF code : ax.getIntermediateCode ()) 
@@ -1032,7 +1038,7 @@ invFunc ::= ID:id OBRACKET invFuncA:inv CBRACKET //ej. decrementar ( invFunA )
 
 
 	Variable fun = new Variable(name, scope);
-	cb.addQuadruple("CALL", fun);
+	cb.addQuadruple("CALL", fun, inv.getNumeroParametros());
 	//cb.addQuadruple("NADA", fun); //solo test
 	invf.setIntermediateCode(cb.create());
 	
@@ -1058,7 +1064,7 @@ invFunc ::= ID:id OBRACKET invFuncA:inv CBRACKET //ej. decrementar ( invFunA )
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 
 	Variable fun = new Variable(name, scope);
-	cb.addQuadruple("CALL", fun);
+	cb.addQuadruple("CALL", fun, 0);
 	//cb.addQuadruple("NADA", fun); //solo test
 	invf.setIntermediateCode(cb.create());
 	RESULT=invf;
@@ -1652,11 +1658,15 @@ main ::= VOID MAIN:mn
 :}
 OBRACKET CBRACKET OBRACE mainA:ma CBRACE
 {: 	
-ScopeIF scope = scopeManager.getCurrentScope();
+	ScopeIF scope = scopeManager.getCurrentScope();
 	Main m = new Main();
 	LabelIF label = new LabelFactory().create("MAIN");
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 	cb.addQuadruple("INL",label); // uno por funcion, para test
+	Variable fun = new Variable("main", scope);
+	cb.addQuadruple("CALL", fun, 0); // debe ir directo a main
+	// funciones iniciales de main
+	
 	cb.addQuadruples(ma.getIntermediateCode());
 	m.setIntermediateCode(cb.create());
 	//m.setIntermediateCode(ma.getIntermediateCode());

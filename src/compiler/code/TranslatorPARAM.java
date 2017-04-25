@@ -13,7 +13,7 @@ public class TranslatorPARAM extends Translator{
 		
 		//temporal.append("MOVE #-"+result.getAddress()+".SP\n"); // PUSH #-2[.IX] inserta en la cima de la pila
 		//temporal.append("PUSH #-"+result.getAddress()+".SP\n"); // PUSH #-2[.IX] inserta en la cima de la pila
-		temporal.append("PUSH #-"+result.getAddress()+"[.IY]\n"); // PUSH #-2[.IX] inserta en la cima de la pila
+		temporal.append("PUSH #"+result.getAddress()+"[.IY]\n"); // PUSH #-2[.IX] inserta en la cima de la pila
 
 		return  temporal.toString();
 	}

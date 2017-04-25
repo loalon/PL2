@@ -36,7 +36,13 @@ void main () {
 	int dos;
 	int tres;
 	
+	uno =123;
+	dos =456;
+	tres =789;
+	printc("CONSTANTES");
+	
 	uno = restarUno(888, 666);
+	/*
 	/*imprimir(uno);*/
 	for (a=30; a==25; a=a-1) {
 		printi(a);
@@ -75,5 +81,5 @@ void main () {
     printi(UNO);
     printi(a);
         
-
+*/
 }
