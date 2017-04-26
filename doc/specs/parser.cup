@@ -93,7 +93,8 @@ non terminal Axiom		axiom;
 
 non terminal Constante constanteS;
 non terminal Constante constante;
-non terminal Grupos<Constante>	decconstantes;
+//non terminal Grupos<Constante>	decconstantes;
+non terminal 	decconstantes;
 
 non terminal	Tipo	tipo;
 non terminal	Camporeg	camporeg;
@@ -632,22 +633,22 @@ expLog ::= expLog:e1 operador:op expLog:e2 //operacion
 	    		//TypeSimpleInteger t1 = (TypeSimpleInteger) tipo1;
 	    		//TypeSimpleInteger t2 = (TypeSimpleInteger) tipo2;
 	    	
-	    		if (e1.isBool() && e2.isBool()) { //deberia evaluar si es 0 o 1 y devolver 0 o 1
-	    			System.out.println("PRUEBA");
-		    		ExpLog e = new ExpLog(new TypeSimpleInteger(scope), true); //lo añade como bool
+	    		//if (e1.isBool() && e2.isBool()) { //deberia evaluar si es 0 o 1 y devolver 0 o 1
+	    			//System.out.println("PRUEBA");
+		    		ExpLog e = new ExpLog(new TypeSimpleInteger(scope)); //lo añade como bool
 		    		cb.addQuadruple ("OR", temp, temp1, temp2); 
 		    		e.setTemporal (temp); 
 		    		e.setIntermediateCode (cb.create()); 
 		    	    RESULT = e;
 		    	    break;
-		    	 } else
-	    		semanticErrorManager.semanticFatalError("La operacion OR debe comparar dos bool : ");
+		    	 //} else
+	    		//semanticErrorManager.semanticFatalError("La operacion OR debe comparar dos bool : ");
 		   	} else
 	    		semanticErrorManager.semanticFatalError("La operacion OR debe comparar dos bool 888: ");	
 	    case "MORE":  
 	    	if (tipo1 instanceof TypeSimpleInteger && tipo2 instanceof TypeSimpleInteger ) { 	    	//deberia devolver 0 o 1
 	    		//e.setType(new TypeSimpleBool(scope));
-	    		ExpLog e = new ExpLog(new TypeSimpleInteger(scope),true); //lo añade como bool
+	    		ExpLog e = new ExpLog(new TypeSimpleInteger(scope)); //lo añade como bool
 	    		
 	    		cb.addQuadruple ("GR", temp, temp1, temp2); 
 	    		e.setTemporal (temp); 
@@ -661,7 +662,7 @@ expLog ::= expLog:e1 operador:op expLog:e2 //operacion
 	    	//deberia devolver 0 o 1
 	    	//e.setType(new TypeSimpleBool(scope));
 	    
-	    		ExpLog e = new ExpLog(new TypeSimpleInteger(scope),true); //lo añade como bool
+	    		ExpLog e = new ExpLog(new TypeSimpleInteger(scope)); //lo añade como bool
 	    		cb.addQuadruple ("EQ", temp, temp1, temp2); 
 	    		e.setTemporal (temp); 
 	    		e.setIntermediateCode (cb.create()); 
@@ -721,12 +722,14 @@ expLog ::= expLog:e1 operador:op expLog:e2 //operacion
 	ExpLog e;
 	
 	int value = new Integer(Integer.valueOf(n.getLexema()));
+	/*
 	System.out.println("valores" + value);
 	if ((value==0) || (value==1)) {
 		e = new ExpLog(new TypeSimpleInteger(scope), true); //lo añade como bool
 		System.out.println("OK " + value);
 		}
 	else
+	*/
 		e = new ExpLog(new TypeSimpleInteger(scope)); //lo añade como integer
 	TemporalFactory tf = new TemporalFactory(scope);
 	TemporalIF temp = tf.create();
@@ -931,7 +934,7 @@ expAsig ::= ID:id ASSIGMENT expLog:el
 	if (!(el.getType().getName().equals(tipo.getName()) )) 
 		semanticErrorManager.semanticFatalError("No coinciden los tipos en la asignación."+" Linea: "+id.getLine());
 	
-	Expresion ea=null;
+	//Expresion ea=null;
 	//if (tipo instanceof TypeSimpleInteger){
 	//	TypeSimpleInteger tip = (TypeSimpleInteger) tipo
 	//	if (tip.esBool())
@@ -940,12 +943,13 @@ expAsig ::= ID:id ASSIGMENT expLog:el
 	//else
 	
 		//Expresion e= null;
+	/*
 	if(el.isBool())
 		ea= new Expresion (tipo, true);
 	else
 		ea= new Expresion (tipo);
-		
-		//ea=new Expresion(tipo); //nno bool
+		*/
+	Expresion ea=new Expresion(tipo); 
 	
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 	TemporalIF elTemp = el.getTemporal();
@@ -976,13 +980,13 @@ expAcceso:ea ASSIGMENT:a expLog:el
 	if (!(symbol instanceof SymbolVariable || symbol instanceof SymbolParameter))
 		semanticErrorManager.semanticFatalError(name+" no es un nombre de variable o parametro previamente declarado o dentro de alcance."+" Linea: "+a.getLine()+" Columna: "+a.getColumn());
 
-	Expresion exp = null; //new Expresion(el.getType());
-	
+	Expresion exp = new Expresion(el.getType());
+	/*
 	if(el.isBool())
 		exp= new Expresion (el.getType(), true);
 	else
 		exp= new Expresion (el.getType());
-	
+	*/
 	TemporalIF elTemp = el.getTemporal(); //el temporal de la expresionLogica
 	int offset = ea.getOffset(); //cojo el desplazamiento
 	cb.addQuadruples(el.getIntermediateCode());
@@ -1006,11 +1010,13 @@ expAcceso:ea ASSIGMENT:a expLog:el
 ***************************************************/
 expresion ::= expLog:el 
 {:
-	Expresion e= null;
+	Expresion e= new Expresion (el.getType());
+	/*
 	if(el.isBool())
 		e= new Expresion (el.getType(), true);
 	else
 		e= new Expresion (el.getType());
+		*/
 	e.setIntermediateCode(el.getIntermediateCode());
 	TemporalIF temp = el.getTemporal();
 	e.setTemporal(temp);
@@ -1018,11 +1024,13 @@ expresion ::= expLog:el
 :}
  | expAsig:ea 
 {: 
-	Expresion e=null;
+	Expresion e=new Expresion (ea.getType());
+	/*
 	if(ea.isBool())
 		e= new Expresion (ea.getType(), true);
 	else
 		e= new Expresion (ea.getType());
+		*/
  	//Expresion e= new Expresion (ea.getType());
 	e.setIntermediateCode(ea.getIntermediateCode());
 	TemporalIF temp = ea.getTemporal();
@@ -1295,7 +1303,8 @@ sent_if ::= IF:id OBRACKET expresion:e CBRACKET SEMICOLON
 	ScopeIF scope = scopeManager.getCurrentScope();
 	TypeIF type = e.getType();
 
-	if(!(type instanceof TypeSimpleInteger && (e.isBool() )))
+	//if(!(type instanceof TypeSimpleInteger && (e.isBool() )))
+	if(!(type instanceof TypeSimpleInteger))
 		semanticErrorManager.semanticFatalError("Condicion de sentencia if no es una expresion logica"+" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
 
 	Sent_if sif=new Sent_if(e);
@@ -1310,7 +1319,8 @@ sent_if ::= IF:id OBRACKET expresion:e CBRACKET SEMICOLON
 		
 	TypeIF type = e.getType();
 	
-	if(!(type instanceof TypeSimpleInteger && ( e.isBool() )))
+	//if(!(type instanceof TypeSimpleInteger && ( e.isBool() )))
+	if(!(type instanceof TypeSimpleInteger))
 		semanticErrorManager.semanticFatalError("Condicion de sentencia if no es una expresion logica"+" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
 	
 	Sent_if sif=new Sent_if(e, sThen);
@@ -1331,7 +1341,8 @@ sent_if ::= IF:id OBRACKET expresion:e CBRACKET SEMICOLON
 	ScopeIF scope = scopeManager.getCurrentScope();
 	TypeIF type = e.getType();
 	
-	if(!(type instanceof TypeSimpleInteger && (e.isBool() )))
+	//if(!(type instanceof TypeSimpleInteger && (e.isBool() )))
+	if(!(type instanceof TypeSimpleInteger ))
 		semanticErrorManager.semanticFatalError("Condicion de sentencia if no es una expresion logica"+" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
 	
 	Sent_if sif=new Sent_if(e, sThen, sElse);
