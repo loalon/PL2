@@ -101,7 +101,11 @@ public class Variable  implements VariableIF
     public void setOffset (int offset) {
     	this.offset=offset;
     }
-
+    public final boolean isParameter ()
+    {
+        return isParameter;
+    }
+    
     /**
      * Indicates whether the address is a global address.
      * @return true if the address is a global address.

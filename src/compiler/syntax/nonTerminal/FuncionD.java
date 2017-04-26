@@ -7,6 +7,7 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
 public class FuncionD extends NonTerminal{
 
 	TypeIF returnType;
+	boolean hasReturn=false;
 
 	public FuncionD (ScopeIF scope) {
 		super();
@@ -18,5 +19,9 @@ public class FuncionD extends NonTerminal{
 	}
 	public void setReturnType(TypeIF returnType){
 		this.returnType=returnType;
+		this.hasReturn=true;
+	}
+	public boolean hasReturn(){
+		return hasReturn;
 	}
 }

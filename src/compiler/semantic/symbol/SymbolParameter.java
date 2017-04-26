@@ -23,9 +23,10 @@ public class SymbolParameter extends SymbolBase
      * @param name The symbol name.
      * @param type The symbol type.
      */
-    public SymbolParameter (ScopeIF scope, String name, TypeIF type)
+    public SymbolParameter (ScopeIF scope, String name, TypeIF type, int address)
     {
         super (scope, name, type);
+        this.address=address;
     } 
     public Integer getAddress() 
 	{

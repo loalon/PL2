@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class FuncionE extends NonTerminal {
 
 	private ArrayList<String> lista;
-	//private int numeroParametros;
+	//private int offset;
 	
 	public FuncionE () {
 		super();
@@ -21,7 +21,7 @@ public class FuncionE extends NonTerminal {
 		this.lista.add(param);
 		//this.numeroParametros++;
 	}
-	public ArrayList<String> getParametros() {
+	public ArrayList<String> getParameters() {
 		return lista;
 	}	
 	public int getNumeroParametros() {

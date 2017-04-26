@@ -1,0 +1,17 @@
+/* vacio  */
+
+void imprimir(int a) {
+	printi(a);
+}
+
+void main() {
+
+	int numero;
+	numero=666;
+	
+	printc("TEST ANTES");
+	printi(numero);
+	imprimir(numero);
+	printc("TEST DESPUES");
+
+}

@@ -8,35 +8,32 @@ public class Funcion extends NonTerminal {
 
 	private TypeIF tipo=null;
 	private String nombre;
-	private ArrayList<String> listaParametros;
-	private int numeroParametros=0;
+	private ArrayList<String> parameters;
 	
 	public Funcion () {
 		super();
-		this.listaParametros = new ArrayList<String>();
+		this.parameters = new ArrayList<String>();
 	}
 	public Funcion (String nombre, TypeIF tipo) {
 		this();
 		this.tipo=tipo;
 		this.nombre=nombre;
 	}
-	public Funcion (String nombre, TypeIF tipo, FuncionE parametros) {
+	public Funcion (String nombre, TypeIF tipo, ArrayList<String> parameters) {
 		this(nombre,tipo);
-		this.listaParametros=parametros.getParametros();
-		this.numeroParametros=parametros.getNumeroParametros();
+		this.parameters=parameters;
 	}
-	
 	public String getNombre () {
 		return nombre;
 	}
 	public TypeIF getTipo () {
 		return tipo;
 	}	
-	public ArrayList<String> getParametros () {
-		return listaParametros;
+	public ArrayList<String> getParameters () {
+		return parameters;
 	}	
-	public int getNumeroParametros () {
-		return numeroParametros;
-	}	
+	public int getParameterNumber(){
+		return parameters.size();
+	}
 
 }

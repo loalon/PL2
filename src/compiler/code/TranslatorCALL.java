@@ -74,6 +74,11 @@ public class TranslatorCALL extends Translator{
 		temporal.append("PUSH #77\n"); //enlace de acceso +5
 		temporal.append("PUSH #888\n"); //valor retorno +6
 		temporal.append("MOVE .R3, .SP\n"); 
+		
+		if (name.equals("main")) 
+			return  temporal.toString();
+		
+		temporal.append("CALL /L_"+name+"\n"); 
 		//temporal.append("PUSH #-"+result.getAddress()+"[.IY]\n"); // PUSH #-2[.IX] inserta en la cima de la pila
 		//dir retorno
 		// llamar a la funcion
@@ -85,8 +90,7 @@ public class TranslatorCALL extends Translator{
 		
 		//main no hace CALL a si mismo, y no tiene porque restaurar contexto,
 		//se omiten las operaciones de restauracion y de retorno
-		if (name.equals("main")) 
-			return  temporal.toString();
+		
 
 		// gestion del resultado
 		temporal.append("MOVE #17, .R9\n"); //es solo una prueba

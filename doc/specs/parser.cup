@@ -704,12 +704,12 @@ expLog ::= expLog:e1 operador:op expLog:e2 //operacion
 	} else if (symbol instanceof SymbolVariable) {
 		SymbolVariable sv = (SymbolVariable) symbol;
 		Variable var = new Variable(sv);
-		//cb.addQuadruple("MVA", temp, var); //temp es la direccion de var
+		
 		cb.addQuadruple("MV", temp, var); //temp es la direccion de var
 	} else if (symbol instanceof SymbolParameter) {
-		SymbolParameter sv = (SymbolParameter) symbol;
-		Variable var = new Variable(sv);
-		//cb.addQuadruple("MVA", temp, var); //temp es la direccion de var
+		SymbolParameter sp = (SymbolParameter) symbol;
+		Variable var = new Variable(sp);
+		
 		cb.addQuadruple("MV", temp, var); //temp es la direccion de var
 	}
 	e.setTemporal(temp);
@@ -924,6 +924,10 @@ expAsig ::= ID:id ASSIGMENT expLog:el
 {:
 	String name=id.getLexema();
 	ScopeIF scope = scopeManager.getCurrentScope();
+	System.out.println(scope);
+	SymbolTableIF sTable = scope.getSymbolTable();
+	System.out.println(sTable);
+	//System.out.println(scope);
 	SymbolIF symbol= scopeManager.searchSymbol(name);
 	if (!(symbol instanceof SymbolVariable || symbol instanceof SymbolParameter))
 		semanticErrorManager.semanticFatalError(name+" no es un nombre de variable o parametro previamente declarado o dentro de alcance."+" Linea: "+id.getLine()+" Columna: "+id.getColumn());
@@ -934,21 +938,6 @@ expAsig ::= ID:id ASSIGMENT expLog:el
 	if (!(el.getType().getName().equals(tipo.getName()) )) 
 		semanticErrorManager.semanticFatalError("No coinciden los tipos en la asignación."+" Linea: "+id.getLine());
 	
-	//Expresion ea=null;
-	//if (tipo instanceof TypeSimpleInteger){
-	//	TypeSimpleInteger tip = (TypeSimpleInteger) tipo
-	//	if (tip.esBool())
-	//		Expresion ea=new Expresion(tip);
-	//}
-	//else
-	
-		//Expresion e= null;
-	/*
-	if(el.isBool())
-		ea= new Expresion (tipo, true);
-	else
-		ea= new Expresion (tipo);
-		*/
 	Expresion ea=new Expresion(tipo); 
 	
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
@@ -981,12 +970,7 @@ expAcceso:ea ASSIGMENT:a expLog:el
 		semanticErrorManager.semanticFatalError(name+" no es un nombre de variable o parametro previamente declarado o dentro de alcance."+" Linea: "+a.getLine()+" Columna: "+a.getColumn());
 
 	Expresion exp = new Expresion(el.getType());
-	/*
-	if(el.isBool())
-		exp= new Expresion (el.getType(), true);
-	else
-		exp= new Expresion (el.getType());
-	*/
+
 	TemporalIF elTemp = el.getTemporal(); //el temporal de la expresionLogica
 	int offset = ea.getOffset(); //cojo el desplazamiento
 	cb.addQuadruples(el.getIntermediateCode());
@@ -996,8 +980,8 @@ expAcceso:ea ASSIGMENT:a expLog:el
 		SymbolVariable sv = (SymbolVariable) symbol;
 		var = new Variable(sv);
 	} else if (symbol instanceof SymbolParameter) {
-		SymbolParameter sv = (SymbolParameter) symbol;
-		var = new Variable(sv);
+		SymbolParameter sp = (SymbolParameter) symbol;
+		var = new Variable(sp);
 	}	
 	var.setOffset(offset);
 	cb.addQuadruple("MV", var, elTemp);	//mover el temp de explog a la direccion de la var de acceso mas desplazamiento
@@ -1011,12 +995,7 @@ expAcceso:ea ASSIGMENT:a expLog:el
 expresion ::= expLog:el 
 {:
 	Expresion e= new Expresion (el.getType());
-	/*
-	if(el.isBool())
-		e= new Expresion (el.getType(), true);
-	else
-		e= new Expresion (el.getType());
-		*/
+
 	e.setIntermediateCode(el.getIntermediateCode());
 	TemporalIF temp = el.getTemporal();
 	e.setTemporal(temp);
@@ -1025,13 +1004,7 @@ expresion ::= expLog:el
  | expAsig:ea 
 {: 
 	Expresion e=new Expresion (ea.getType());
-	/*
-	if(ea.isBool())
-		e= new Expresion (ea.getType(), true);
-	else
-		e= new Expresion (ea.getType());
-		*/
- 	//Expresion e= new Expresion (ea.getType());
+
 	e.setIntermediateCode(ea.getIntermediateCode());
 	TemporalIF temp = ea.getTemporal();
 	e.setTemporal(temp);
@@ -1095,6 +1068,7 @@ invFunc ::= ID:id OBRACKET invFuncA:inv CBRACKET //ej. decrementar ( invFunA )
 	ScopeIF scope = scopeManager.getCurrentScope();
 	SymbolIF symbol = scopeManager.searchSymbol(name);
 	TypeIF tipo = symbol.getType();
+	
 	if (tipo==null)
 		semanticErrorManager.semanticFatalError("Procedimiento: "+name+" no ha sido declarado."+" Linea: "+id.getLine()+" Columna: "+id.getColumn());
 	//if (!(tipo instanceof TypeSimpleInteger))
@@ -1102,7 +1076,7 @@ invFunc ::= ID:id OBRACKET invFuncA:inv CBRACKET //ej. decrementar ( invFunA )
 
 	if (!(symbol instanceof SymbolFunction || symbol instanceof SymbolProcedure)) 
 		semanticErrorManager.semanticFatalError(""+name+" no es un procediemiento o una funcion."+" Linea: "+id.getLine()+" Columna: "+id.getColumn());
-
+	System.out.println("Test de invocacion");
 	InvFunc invf = new InvFunc(name, tipo, 0);
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 
@@ -1196,6 +1170,7 @@ sentForA ::= FOR OBRACKET ID:id ASSIGMENT expLog:elog SEMICOLON expresion:e1 SEM
 		semanticErrorManager.semanticFatalError("Las declaraciones de la sentencia for no son del tipo adecuado."+" Linea: "+id.getLine()+" Columna: "+id.getColumn());
 	
 	//TemporalIF eTemp = elog.getTemporal (); //sacar el temporal de la expresion asignada
+	//WIP meter tambien parametros
 	SymbolVariable var = (SymbolVariable)symbol;
 	SentForA senfor = new SentForA(var, elog, e1, e2);	
 	RESULT =senfor ;
@@ -1211,7 +1186,7 @@ sentForA ::= FOR OBRACKET ID:id ASSIGMENT expLog:elog SEMICOLON expresion:e1 SEM
 	if (!(tipo1 instanceof TypeSimpleInteger && tipo2 instanceof TypeSimpleInteger &&
 	    tipo3 instanceof TypeSimpleInteger && tipo4 instanceof TypeSimpleInteger)) //Todos los tipos son validos
 		semanticErrorManager.semanticFatalError("Las declaraciones de la sentencia for no son del tipo adecuado."+" Linea: "+id.getLine()+" Columna: "+id.getColumn());
-
+//WIP meter tambien parametros
 	SymbolVariable var= eac.getVariable(); //debe ser mejorado
 	
 	SentForA senfor = new SentForA(var, elog, e1, e2, eac.getOffset());	
@@ -1224,21 +1199,22 @@ sentForA ::= FOR OBRACKET ID:id ASSIGMENT expLog:elog SEMICOLON expresion:e1 SEM
 ************************************/
 sentEntrada ::= PRINTI OBRACKET ID:id CBRACKET SEMICOLON 
 {:
-	System.out.println("AQUI");
+	System.out.println("reconocido como ID");
 	ScopeIF scope = scopeManager.getCurrentScope();
 	String name = id.getLexema();
 
 	if(!scopeManager.containsSymbol(name))
 		semanticErrorManager.semanticFatalError("Variable : "+name+" no ha sido declarada." +" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
-		
+	//System.out.println("AQUI2");
 	Sentencia sen= new Sentencia();
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder (scope);
 	//cb.addQuadruples(e.getIntermediateCode()); //buscar el codigo intermedio
 	//TemporalIF eTemp = e.getTemporal (); //buscar el temp de expresion
 	//TemporalFactory tf = new TemporalFactory(scope);
 	//	TemporalIF temp = tf.create();
-
+	//System.out.println("AQUI3");
 	SymbolIF symbol = scopeManager.searchSymbol(name);
+	//System.out.println("AQU4");
 	
 	if(symbol instanceof SymbolVariable) {
 		cb.addQuadruple("PRINT", new Variable((SymbolVariable) symbol)); //sentencia de print
@@ -1247,17 +1223,20 @@ sentEntrada ::= PRINTI OBRACKET ID:id CBRACKET SEMICOLON
 	} else {
 		semanticErrorManager.semanticFatalError(""+name+" no hace referencia a una variable o un parametro." +" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
 	}
+	System.out.println("AQUI5");
 	sen.setIntermediateCode(cb.create());
 	RESULT= new Sentencia();
 :}
 | PRINTI OBRACKET expresion:e CBRACKET SEMICOLON //
 {:
-System.out.println("AQUI2");
+	System.out.println("Reconocido como expresion");
 	ScopeIF scope = scopeManager.getCurrentScope();
 	Sentencia sen= new Sentencia();
+	//System.out.println("ACA2");
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder (scope);
 	TemporalIF eTemp = e.getTemporal(); //buscar el temp de expresion
 	cb.addQuadruples(e.getIntermediateCode()); //buscar el codigo intermedio
+	//System.out.println("ACA3");
 	cb.addQuadruple("PRINT", eTemp);
 	sen.setIntermediateCode(cb.create());
 	RESULT= sen;
@@ -1499,7 +1478,6 @@ funcion ::= VOID ID:id // procedimiento
 		semanticErrorManager.semanticFatalError("La funcion "+name+" ya esta declarado en este ambito. "+" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
 	
 	System.out.println("La funcion VOID es " + name);
-		//System.out.println("AQUI -2");	
 	ScopeIF scopeX = scopeManager.openScope(name);
 	
 :}  OBRACKET funcionS:fs 
@@ -1512,20 +1490,16 @@ funcion ::= VOID ID:id // procedimiento
 	if (!(fs.getReturnType() instanceof TypeSimpleVoid)) //comprobar return type
 		semanticErrorManager.semanticFatalError("El tipo de la sentencia de retorno no coincide con el tipo de la funcion "+name+" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
 
-	int parametros= fs.tieneParametros() ? fs.getParametros().getNumeroParametros() : 0;
-		sTable.addSymbol(name, new SymbolProcedure(scope, name, new TypeSimpleVoid(scope), parametros));
+	sTable.addSymbol(name, new SymbolProcedure(scope, name, new TypeSimpleVoid(scope), fs.getParameterNumber()));
 
-	Funcion fun=new Funcion();
-	
-	if(parametros==0)
-		fun= new Funcion(name,new TypeSimpleVoid(scope));	
-	else
-		fun= new Funcion(name, new TypeSimpleVoid(scope), fs.getParametros());
-	
+	Funcion fun= new Funcion(name, new TypeSimpleVoid(scope), fs.getParameters());
+
 	LabelIF label = new LabelFactory().create(name);
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 	cb.addQuadruple("INL", label); 
 	cb.addQuadruples(fs.getIntermediateCode());
+	if (!(fs.hasReturn()))	
+		cb.addQuadruple("RET"); 
 	fun.setIntermediateCode(cb.create());
 		
 	RESULT=fun;
@@ -1552,16 +1526,9 @@ funcion ::= VOID ID:id // procedimiento
 	if (!(fs.getReturnType() instanceof TypeSimpleInteger)) //comprobar return type
 		semanticErrorManager.semanticFatalError("El tipo de la sentencia de retorno no coincide con el tipo de la funcion "+name+" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
 
-	int parametros= fs.tieneParametros() ? fs.getParametros().getNumeroParametros() : 0;
-	sTable.addSymbol(name, new SymbolFunction(scope, name, new TypeSimpleInteger(scope), parametros));
+	sTable.addSymbol(name, new SymbolProcedure(scope, name, new TypeSimpleInteger(scope), fs.getParameterNumber()));
 
-	Funcion fun=new Funcion();
-	
-	if(parametros==0)
-		fun= new Funcion(name,new TypeSimpleInteger(scope));	
-	else
-		fun= new Funcion(name, new TypeSimpleInteger(scope), fs.getParametros());
-	
+	Funcion fun= new Funcion(name, new TypeSimpleInteger(scope), fs.getParameters());
 	LabelIF label = new LabelFactory().create(name);
 		
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
@@ -1573,20 +1540,24 @@ funcion ::= VOID ID:id // procedimiento
 
 :};
 
+
 funcionS ::=  funcionE:fe CBRACKET OBRACE funcionA:fa CBRACE // parametros){sentencias}
 {:
-		//System.out.println("AQUI -1");
-	//String name=id.getLexema();
+
 	ScopeIF scope = scopeManager.getCurrentScope();			
 	SymbolTableIF sTable = scope.getSymbolTable();
-	for (String name : fe.getParametros()){
-		if(sTable.containsSymbol(name))
-			semanticErrorManager.semanticFatalError("La funcion "+scope.getName()+" tiene dos parametros de entrada con el mismo nombre.");
-		sTable.addSymbol(name, new SymbolParameter(scope, name, new TypeSimpleInteger(scope)));
+	
+	//gestion offsets de los parametros
+	int nextParameter=1; //metemos una direccion para erspetar el orden en el que iran en la pila
+	for (String name : fe.getParameters()){
+		SymbolParameter symbol = (SymbolParameter) sTable.getSymbol(name);
+		symbol.setAddress(-nextParameter);
+		nextParameter+=1;
 	}
 
-
-	FuncionS fs=new FuncionS(fe, fa.getReturnType());
+	FuncionS fs=new FuncionS(fe.getParameters(), fa.getReturnType());
+	if (fa.hasReturn())	
+		fs.setHasReturn();
 	fs.setIntermediateCode(fa.getIntermediateCode());
 	scopeManager.closeScope();	 
 	RESULT=fs;
@@ -1595,6 +1566,8 @@ funcionS ::=  funcionE:fe CBRACKET OBRACE funcionA:fa CBRACE // parametros){sent
 |CBRACKET OBRACE funcionA:fa  CBRACE
 {:
 	FuncionS fs=new FuncionS(fa.getReturnType()); //establece tipo retorno
+	if (fa.hasReturn())	
+		fs.setHasReturn();
 	fs.setIntermediateCode(fa.getIntermediateCode());
 	scopeManager.closeScope(); 
 	RESULT=fs;
@@ -1604,7 +1577,10 @@ funcionS ::=  funcionE:fe CBRACKET OBRACE funcionA:fa CBRACE // parametros){sent
 
 funcionA ::= funcionB:fb funcionC:fc funcionD:fd //sentencias
 {: 
-	FuncionA fa =new FuncionA(fd.getReturnType()); //establece tipo de retorno
+
+	FuncionA fa =new FuncionA(fd.getReturnType());//establece tipo de retorno
+	if (fd.hasReturn())	
+		fa.setHasReturn();
 	fa.setIntermediateCode(fd.getIntermediateCode());
 
 	RESULT=fa;
@@ -1655,29 +1631,23 @@ funcionD ::= sentencia:sen funcionD:fd
 
 //Declaracion de parametros funcion			
 funcionE ::= INT ID:id COMMA funcionE:fe 
-//WIP Opcional comprobacion mas arriba
 {:
-	//System.out.println("AQUI -1");
 	String name=id.getLexema();
-	//ScopeIF scope = scopeManager.getCurrentScope();			
-	//SymbolTableIF sTable = scope.getSymbolTable();
-	fe.add(name);
-	//if(sTable.containsSymbol(name))
-		//semanticErrorManager.semanticFatalError("La funcion "+scope.getName()+" tiene dos parametros de entrada con el mismo nombre." +" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
+	ScopeIF scope = scopeManager.getCurrentScope();			
+	SymbolTableIF sTable = scope.getSymbolTable();
+	sTable.addSymbol(name, new SymbolParameter(scope, name, new TypeSimpleInteger(scope), 0));
 	
-	//sTable.addSymbol(name,new SymbolParameter(scope, name, new TypeSimpleInteger(scope)));
+	fe.add(name);
 	RESULT=fe;
 :}
 | INT ID:id 
 {:
-
 	String name=id.getLexema();
-	//ScopeIF scope = scopeManager.getCurrentScope();			
-	//SymbolTableIF sTable = scope.getSymbolTable();
+	ScopeIF scope = scopeManager.getCurrentScope();			
+	SymbolTableIF sTable = scope.getSymbolTable();
+	sTable.addSymbol(name, new SymbolParameter(scope, name, new TypeSimpleInteger(scope), 0));
+	
 	FuncionE fe = new FuncionE(name);
-	//if(sTable.containsSymbol(name))
-		//semanticErrorManager.semanticFatalError("La funcion "+scope.getName()+" tiene dos parametros de entrada con el mismo nombre." +" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
-	//sTable.addSymbol(name,new SymbolParameter(scope, name, new TypeSimpleInteger(scope)));
 	RESULT=fe;
 :};		
 
@@ -1697,7 +1667,7 @@ main ::= VOID MAIN:mn
 	if(sTable.containsSymbol("main"))
 		semanticErrorManager.semanticFatalError("No pueden existir dos funciones main " + mn.getLine() + mn.getColumn());
 	TypeIF tipoVoid = new TypeSimpleVoid(scope);
-	sTable.addSymbol("main",new SymbolFunction(scope, "main", tipoVoid, 0));
+	sTable.addSymbol("main",new SymbolProcedure(scope, "main", tipoVoid, 0));
 	
 	scopeManager.openScope("main");
 	

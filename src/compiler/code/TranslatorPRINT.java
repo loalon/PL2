@@ -37,12 +37,19 @@ public class TranslatorPRINT extends Translator{
 		if (result instanceof Variable) {
 			Variable var = (Variable) result;
 			//varaible string
+			
+				
 			if (var.getType() instanceof TypeString) {
 				temporal.append("WRSTR /"+var.getName()+"\n"); //hago referencia a la etiqueta
 				temporal.append("WRCHAR #10"); 
 			} else if (var.getType() instanceof TypeSimpleInteger) {
-				temporal.append("WRINT /"+var.getAddress()+"\n");
-				temporal.append("WRCHAR #10"); 
+				if(var.getScope().getLevel()==0){ //scope global
+					temporal.append("WRINT #"+var.getAddress()+"[.IX]\n");
+					temporal.append("WRCHAR #10");
+				} else {
+					temporal.append("WRINT /"+var.getAddress()+"\n");
+					temporal.append("WRCHAR #10");
+				}
 			}
 		}
 		if (result instanceof Temporal) {

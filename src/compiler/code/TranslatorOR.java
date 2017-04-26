@@ -31,7 +31,7 @@ public class TranslatorOR extends Translator {
 		temporal.append("CMP .A, #0\n"); // compara el resultado con 0
 		//si z=0, (resultado no 0) salta a label1
 		temporal.append("BNZ /"+label1+"\n"); //si z=0, salta para evaluar como OR
-		//sino mete un 0 en el resultado y sale
+		//si no mete un 0 en el resultado y sale
 		temporal.append("MOVE #0, #"+result.getAddress()+"[.IY]\n"); //guarda en el temporal 1 por ser verdad
 		temporal.append("BR /"+labelEnd+"\n"); //si z=0, salta para evaluar como OR
 			

@@ -8,6 +8,7 @@ public class FuncionA extends NonTerminal{
 
 	//private ArrayList<String> listaParametros;
 	TypeIF returnType;
+	boolean hasReturn=false;
 
 	public FuncionA (TypeIF returnType) {
 		super();
@@ -15,6 +16,12 @@ public class FuncionA extends NonTerminal{
 	}
 	public TypeIF getReturnType(){
 		return returnType;
+	}
+	public boolean hasReturn(){
+		return hasReturn;
+	}
+	public void setHasReturn(){
+		this.hasReturn=true;
 	}
 	/*
 	public FuncionA (ArrayList<String> listaParametros) {
