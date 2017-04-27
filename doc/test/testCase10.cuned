@@ -6,8 +6,8 @@ void imprimir(int a) {
 
 void main() {
 
-	int numero;
-	numero=666;
+	int numero=666;
+	/*numero=666;*/
 	
 	printc("TEST ANTES");
 	printi(numero);

@@ -106,7 +106,7 @@ non terminal	VariableA variable;
 non terminal	VariableA	variableA;
 non terminal	VariableB	variableB;
 non terminal	VariableC	variableC;
-non terminal	ArrayList<VariableA>	decvariables;
+non terminal	Decvariables	decvariables;
 
 non terminal	ExpLog	expLog;
 non terminal	Operador	operador;
@@ -120,7 +120,7 @@ non terminal	InvFuncA	invFuncA;
 non terminal	Funcion    funcion;
 non terminal	FuncionA funcionA;
 non terminal	ArrayList<Tipo>	funcionB;
-non terminal	ArrayList<VariableA>	funcionC;
+non terminal	FuncionC	funcionC;
 non terminal	FuncionD	funcionD;
 non terminal	FuncionE	funcionE;
 non terminal	FuncionS	funcionS;
@@ -128,9 +128,9 @@ non terminal	Decfunciones	decfunciones;
 
 non terminal	Main	main;
 non terminal	Main	mainA;
-non terminal	ArrayList<Tipo>	mainB;
-non terminal	ArrayList<VariableA>	mainC;
-non terminal	MainD	mainD;
+non terminal	Main	mainB;
+non terminal	Main	mainC;
+non terminal	Main	mainD;
 
 non terminal 	SentFor	sentFor;
 non terminal	SentForA	sentForA;
@@ -257,7 +257,9 @@ axiom ::= decconstantes:dec dectipos:det decvariables:dev decfunciones:def
 	System.out.println("Axioma");
 	Axiom ax = new Axiom();
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+	cb.addQuadruples(dev.getIntermediateCode()); //activar al final 
 	cb.addQuadruples(def.getIntermediateCode()); //OK
+	
 	ax.setIntermediateCode(cb.create());
 	RESULT= ax;
 :};
@@ -288,9 +290,26 @@ dectipos ::= tipo:tp dectipos:dct
 
 decvariables ::= decvariables:dec variable:var
 {:
-	dec.add(var);
+	ScopeIF scope = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+//WIP quizas tenga que alterar el orden del CI	
+	cb.addQuadruples(dec.getIntermediateCode());
+	
+	cb.addQuadruples(var.getIntermediateCode());
+		System.out.println("el codigo de decvarA es: " + var.getIntermediateCode ());
+	dec.setIntermediateCode(cb.create());
+	//dec.add(var);
 	RESULT=dec;
-:} | {:	RESULT= new ArrayList<VariableA>(); :};
+:} | {:
+	ScopeIF scope = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+	Decvariables dec = new Decvariables();
+	cb.addQuadruple("NADA"); // evita el nullpointer
+	cb.addQuadruple("NADA"); // evita el nullpointer
+	cb.addQuadruple("NADA"); // evita el nullpointer
+	dec.setIntermediateCode(cb.create());
+	RESULT= dec;
+:};
 
 decfunciones ::= funcion:f decfunciones:df
 {:
@@ -491,7 +510,7 @@ variable ::= ID:id variableA:va  //aqui el tipo personalizado se compara con lo 
 				//type=new TypeSimpleInteger(scope);
 		for(String s : lista) {
 			if(sTable.containsSymbol(s))
-				semanticErrorManager.semanticFatalError("El nombre : "+s+" duplicado" + id.getLine() + id.getColumn());
+				semanticErrorManager.semanticFatalError("El nombre INT : "+s+" duplicado" + id.getLine() + id.getColumn());
 			type =new TypeSimpleInteger(scope);
 			sTable.addSymbol(s,new SymbolVariable(scope, s, type ));		
 		}
@@ -500,6 +519,7 @@ variable ::= ID:id variableA:va  //aqui el tipo personalizado se compara con lo 
 	}
 	va.setType(type);
 	va.addVariable(name);		
+	System.out.println(va.getIntermediateCode());
 	RESULT= va;	
 :};
 
@@ -519,27 +539,55 @@ variableA ::=  ID:id SEMICOLON
  | ID:id variableC:vc SEMICOLON 
 {:
  	String name = id.getLexema();
-	VariableA va = new VariableA(name,vc.getType());
+ 	ScopeIF scope = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+	SymbolTableIF sTable = scope.getSymbolTable();
+	if (sTable.containsSymbol(name))
+		semanticErrorManager.semanticFatalError("Variable : "+name+" duplicada " + id.getLine() + id.getColumn());
+	VariableA va = new VariableA(vc.getType());
+	
+	SymbolVariable sv = new SymbolVariable(scope, name, new TypeSimpleInteger(scope));
+	sTable.addSymbol(sv);
+	TemporalIF temp = vc.getTemporal();
+	cb.addQuadruples (vc.getIntermediateCode ());
+
+	cb.addQuadruple ("MV", new Variable(sv), temp); 
+	va.setIntermediateCode(cb.create());
 	RESULT=va;
 :}
  | ID:id variableC:vc variableB:vb SEMICOLON 
 {:
  	String name = id.getLexema();
+ 	ScopeIF scope = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+	SymbolTableIF sTable = scope.getSymbolTable();
+	if (sTable.containsSymbol(name))
+		semanticErrorManager.semanticFatalError("Variable : "+name+" duplicada " + id.getLine() + id.getColumn());
+		
 	TypeIF type = vc.getType();
 	TypeIF typeLista =vb.getType();
-	VariableA va;
+	VariableA va=new VariableA();
 
 	if (typeLista==null){
 		va=new VariableA(vb.getVariables(), type);
-		va.addVariable(name);
+		//va.addVariable(name);
 		va.setType(type);
-		RESULT=va;
+		
 	} else if (typeLista.equals(type)) {
 		va=new VariableA(vb.getVariables(), typeLista);
-		va.addVariable(name);
-		RESULT=va;
+		//va.addVariable(name);
+		
 	} else
 		semanticErrorManager.semanticFatalError("La variable "+name+" no es del mismo tipo que las declaradas." +" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
+		
+	SymbolVariable sv = new SymbolVariable(scope, name, new TypeSimpleInteger(scope));
+	sTable.addSymbol(sv);
+	TemporalIF temp = vc.getTemporal();
+	cb.addQuadruples (vc.getIntermediateCode ()); 
+	cb.addQuadruple ("MV", new Variable(sv), temp); 
+	va.setIntermediateCode(cb.create());	
+		
+		RESULT=va;
 :};
 
 
@@ -547,54 +595,111 @@ variableB ::= COMMA ID:id variableB:vb //,x otra
 {:
 //iniciar valor por defecto???
 	String name = id.getLexema();
+		ScopeIF scope = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 	vb.addVariable(name);
+		cb.addQuadruple ("NADA"); //evita nulls
+	vb.setIntermediateCode(cb.create());
 	RESULT=vb;			
 :}
 | COMMA ID:id //x
 {:
 	String name = id.getLexema();
+	ScopeIF scope = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+
+	
 	VariableB vb = new VariableB(name);
+		cb.addQuadruple ("NADA"); //evita nulls
+	vb.setIntermediateCode(cb.create());
 	RESULT=vb;	
 :}
 | COMMA ID:id variableC:vc // , x=3 // 
 {:
 	String name = id.getLexema();
-	VariableB vb = new VariableB(name, vc.getType());
+	ScopeIF scope = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+	SymbolTableIF sTable = scope.getSymbolTable();
+	if (sTable.containsSymbol(name))
+		semanticErrorManager.semanticFatalError("Variable : "+name+" duplicada " + id.getLine() + id.getColumn());
+	//VariableB vb = new VariableB(name, vc.getType());
+	VariableB vb = new VariableB();
+	SymbolVariable sv = new SymbolVariable(scope, name, new TypeSimpleInteger(scope));
+	sTable.addSymbol(sv);
+	TemporalIF temp = vc.getTemporal();
+	cb.addQuadruple ("MV", new Variable(sv), temp); 
+	vb.setIntermediateCode(cb.create());
 	RESULT=vb;	
 :}
 | COMMA ID:id variableC:vc variableB:vb //,x=3,otra //int x=3, contador
 {:
 	String name = id.getLexema();
+	ScopeIF scope = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+	SymbolTableIF sTable = scope.getSymbolTable();
+	if (sTable.containsSymbol(name))
+		semanticErrorManager.semanticFatalError("Variable : "+name+" duplicada " + id.getLine() + id.getColumn());
+	//VariableB vb = new VariableB();
 	TypeIF type = vc.getType();
-	TypeIF typeLista =vb.getType();
-	if (typeLista==null)
+	//TypeIF typeLista =vb.getType();
+	//if (typeLista==null)
 		vb.setType(type);
-	else if (typeLista.equals(type)){
-		vb.addVariable(name);
-	} else
-		semanticErrorManager.semanticFatalError("Variable : "+name+" no es del mismo tipo que las declaradas " + id.getLine() + id.getColumn());
-	RESULT=vb;	
+	//else if (typeLista.equals(type)){
+		//vb.addVariable(name);
+	//} else
+		//semanticErrorManager.semanticFatalError("Variable : "+name+" no es del mismo tipo que las declaradas " + id.getLine() + id.getColumn());
+		
+	SymbolVariable sv = new SymbolVariable(scope, name, new TypeSimpleInteger(scope));
+	sTable.addSymbol(sv);
+	TemporalIF temp = vc.getTemporal();
+	cb.addQuadruple ("MV", new Variable(sv), temp); 
+	vb.setIntermediateCode(cb.create());
+	RESULT=vb;		
 :};
 
 variableC ::= ASSIGMENT NUM:nu //tras asignar o numero 
 {:
+	String name = nu.getLexema();
+	Integer valor = new Integer(Integer.valueOf(name));
 	ScopeIF scope = scopeManager.getCurrentScope();
-	int level=scope.getLevel();
+	TemporalFactoryIF tf =new TemporalFactory(scope);
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder (scope);
+	TemporalIF temp = tf.create(); //guardara el valor temporalmente
+
+	cb.addQuadruple ("MV", temp, new Value(valor)); 
+		
 	TypeIF tipo = new TypeSimpleInteger(scope); //creo un tipo simpleInteger
-	VariableC var= new VariableC(nu.getLexema(),tipo); 
-	RESULT= var;
+	VariableC varC= new VariableC(nu.getLexema(), tipo); 
+	varC.setTemporal(temp);
+	varC.setIntermediateCode(cb.create()); 
+	RESULT= varC;
 :}
  | ASSIGMENT ID:id //o otra variable de un tipo conocido
-{: // WIP, añadircodigo intermedio para gestion???
-	ScopeIF scope = scopeManager.getCurrentScope();
-	int level=scope.getLevel();
+{: 
 	String name = id.getLexema();
-	SymbolIF symbol = scopeManager.searchSymbol(name);
-	TypeIF tipo = symbol.getType(); //buscarTipoVariable(level,name);
+	ScopeIF scope = scopeManager.getCurrentScope();
+	TemporalFactoryIF tf =new TemporalFactory(scope);
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder (scope);
 
+	TemporalIF temp = tf.create(); //guardara el valor temporalmente
+	SymbolIF symbol = scopeManager.searchSymbol(name); //en todo scope abierto
+	
+	TypeIF tipo = symbol.getType();
 	if(tipo==null)
 		semanticErrorManager.semanticFatalError(name+" No 888 tipo declarado" + id.getLine() + id.getColumn());
-	RESULT= new VariableC(name,tipo);
+	
+	Variable var = null;
+	if (symbol instanceof SymbolVariable) 
+		var = new Variable((SymbolVariable) symbol);
+	else if (symbol instanceof SymbolParameter) 
+		var = new Variable((SymbolParameter) symbol);
+	
+	cb.addQuadruple ("MV", temp, var); 
+	VariableC varC= new VariableC(name, tipo); 
+	varC.setTemporal(temp);
+	varC.setIntermediateCode(cb.create()); 
+	
+	RESULT= varC;
 :} ;
 
 /*********************************************
@@ -1277,7 +1382,10 @@ sentSalida ::= PRINTC OBRACKET TCHAIN:tch CBRACKET SEMICOLON
 /************************************
 //Sentencia if
 ************************************/
-sent_if ::= IF:id OBRACKET expresion:e CBRACKET SEMICOLON 
+sent_if ::=
+
+/* Sentencia eliminada por recomendacion del ED en el foro 4/4/17
+ IF:id OBRACKET expresion:e CBRACKET SEMICOLON 
 {:
 	ScopeIF scope = scopeManager.getCurrentScope();
 	TypeIF type = e.getType();
@@ -1290,7 +1398,11 @@ sent_if ::= IF:id OBRACKET expresion:e CBRACKET SEMICOLON
 	sif.setIntermediateCode(e.getIntermediateCode());	
 	RESULT= sif;
 :}
-|IF:id OBRACKET expresion:e CBRACKET sentencia:sThen
+|
+
+*/
+
+IF:id OBRACKET expresion:e CBRACKET sentencia:sThen
 {:
 	ScopeIF scope = scopeManager.getCurrentScope();
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
@@ -1577,11 +1689,15 @@ funcionS ::=  funcionE:fe CBRACKET OBRACE funcionA:fa CBRACE // parametros){sent
 
 funcionA ::= funcionB:fb funcionC:fc funcionD:fd //sentencias
 {: 
-
+	ScopeIF scope = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 	FuncionA fa =new FuncionA(fd.getReturnType());//establece tipo de retorno
 	if (fd.hasReturn())	
 		fa.setHasReturn();
-	fa.setIntermediateCode(fd.getIntermediateCode());
+	//fa.setIntermediateCode(fd.getIntermediateCode());
+	//cb.addQuadruples(fc.getIntermediateCode());
+	cb.addQuadruples(fd.getIntermediateCode());
+	fa.setIntermediateCode(cb.create());
 
 	RESULT=fa;
 :};
@@ -1597,10 +1713,15 @@ funcionB ::= tipo:ti funcionB:fb
 
 funcionC ::= funcionC:fc variable:var
 {:
-	fc.add(var);
+	fc.setIntermediateCode(var.getIntermediateCode());
 	RESULT=fc;
 :} | {:
-	ArrayList<VariableA> fc = new ArrayList<VariableA>();
+
+	ScopeIF scope = scopeManager.getCurrentScope();		
+	FuncionC fc = new FuncionC();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+	cb.addQuadruple("NADA"); // evita el nullpointer
+	fc.setIntermediateCode(cb.create());
 	RESULT=fc;
 :};
 
@@ -1693,28 +1814,33 @@ OBRACKET CBRACKET OBRACE mainA:ma CBRACE
 
 mainA ::= mainB:mb mainC:mc mainD:md
 {: 
+	ScopeIF scope = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 	Main ma= new Main();
-	ma.setIntermediateCode(md.getIntermediateCode());
-	//RESULT=new BloqueSent(mb, mc, null);
+	cb.addQuadruples(mc.getIntermediateCode());
+	cb.addQuadruples(md.getIntermediateCode());
+	ma.setIntermediateCode(cb.create());
 	RESULT= ma; 
 :};
 
 mainB ::= tipo:ti mainB:mb 
-{:
-	//mb.add(ti);
-	//RESULT=mb;
-:}
-| {: 
-//RESULT=new ArrayList<Tipo>(); 
-:};
+{::} | {::};
 
 mainC ::= mainC:mc variable:var
 {:
-	//mc.add(var);
-	//RESULT=mc;
+	mc.setIntermediateCode(var.getIntermediateCode());
+	RESULT=mc;
 :}
 | {:
- //RESULT=new ArrayList<VariableA>(); 
+
+	ScopeIF scope = scopeManager.getCurrentScope();		
+	Main mc= new Main(); 
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+	cb.addQuadruple("NADA"); // evita el nullpointer
+	mc.setIntermediateCode(cb.create());
+	RESULT=mc;
+	 
+	 
  :};
 						
 mainD ::= sentencia:sen mainD:md 
@@ -1727,7 +1853,7 @@ mainD ::= sentencia:sen mainD:md
 
 	RESULT=md;
 :} | {: 
-	MainD md = new MainD();
+	Main md = new Main();
 	ScopeIF scope = scopeManager.getCurrentScope();
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 	cb.addQuadruple("NADA"); // evita el nullpointer

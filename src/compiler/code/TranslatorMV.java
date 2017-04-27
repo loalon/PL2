@@ -42,7 +42,7 @@ public class TranslatorMV extends Translator {
 					//temporal.append("MOVE #"+ from.getAddress()+"[.IY], [.A] \n"); //el temporal se mueve del heap a la direccion referenciada por A
 					temporal.append("MOVE #"+ from.getAddress()+"[.IY], #"+to.getAddress()+"[.IX] \n");
 				} else {
-					temporal.append("MOVE #"+ from.getAddress()+"[.IY], #"+to.getAddress()+"[.IX] \n");
+					temporal.append("MOVE #"+ from.getAddress()+"[.IY], #"+(to.getAddress()+1)+"[.IX] \n");
 					//temporal.append("ADD #"+SIZE_RA+", .IX\n"); //la septima posicion desde Ix comienza a guardar var locales
 					//temporal.append("MOVE .A, .R3\n"); //el resultado al registro temporal R3
 					//temporal.append("ADD .R3, #"+to.getAddress()+"\n"); //a R3 le sumo el offset de la variable
@@ -68,7 +68,7 @@ public class TranslatorMV extends Translator {
 					//temporal.append("MOVE  [.A], #"+ to.getAddress()+"[.IY] \n"); //el temporal se mueve del heap a la direccion referenciada por A
 					temporal.append("MOVE #"+ from.getAddress()+"[.IX], #"+to.getAddress()+"[.IY] \n");
 				} else {
-					temporal.append("MOVE #"+ from.getAddress()+"[.IX], #"+to.getAddress()+"[.IY] \n");
+					temporal.append("MOVE #"+ (from.getAddress()+1)+"[.IX], #"+to.getAddress()+"[.IY] \n");
 					
 					//temporal.append("ADD #"+SIZE_RA+", .IX\n"); //la septima posicion desde Ix comienza a guardar var locales
 					//temporal.append("MOVE .A, .R3\n"); //el resultado al registro temporal R3

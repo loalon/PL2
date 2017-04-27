@@ -9,20 +9,26 @@ public class VariableA extends NonTerminal {
 	private TypeIF tipo=null; //tipo de la lista de variables
 	private ArrayList<String> lista;
 	
-	public VariableA (String nombre) { //si solo un elemento
+	public VariableA () {
 		super();
 		this.lista=new ArrayList<String>();
+	}
+	public VariableA (TypeIF tipo) { //si solo un elemento
+		this();
+		this.tipo=tipo;
+	}
+	public VariableA (String nombre) { //si solo un elemento
+		this();
 		this.lista.add(nombre);
 	}
 	
 	public VariableA (String nombre, TypeIF tipo) {
-		super();
+		this();
 		this.tipo=tipo;
-		this.lista=new ArrayList<String>();
 		this.lista.add(nombre);
 	}
 	public VariableA (ArrayList<String> lista, TypeIF tipo) {
-		super();
+		this();
 		this.tipo=tipo;
 		this.lista=lista;
 	}	
