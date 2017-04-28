@@ -42,8 +42,6 @@ void main() {
 	imprimir(numero);
 	printc("TEST DESPUES 1");
 	
-	
-	
 	printc("TEST ANTES 2");
 	printi(numero2);
 	imprimir(numero2);
@@ -54,8 +52,11 @@ void main() {
 	printi(numero2);
 	
 	resultado=restar(numero3, numero2);
-	printc("TEST RESTAR DESPUES");
+	printc("TEST RESTAR ANTES");
 	printi(numero3);
+	printi(numero2);
+	printc("TEST RESTAR DESPUES ");
+		printi(numero3);
 	printi(numero2);
 	printi(resultado);
 	

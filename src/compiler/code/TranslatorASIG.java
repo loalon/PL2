@@ -22,7 +22,7 @@ public class TranslatorASIG extends Translator {
 		else {
 			//if(var.isParameter()) {
 				
-				temporal.append("MOVE #1[.IX], #"+(var.getAddress()+SIZE_RA)+"[.IX] \n");
+				temporal.append("MOVE #1[.IX], #"+(var.getAddress()+SIZE_RA+1)+"[.IX] \n");
 			//} else {
 			//	temporal.append("MOVE #"+ from.getAddress()+"[.IY], #"+(to.getAddress()+1)+"[.IX] \n");
 				//temporal.append("ADD #"+SIZE_RA+", .IX\n"); //la septima posicion desde Ix comienza a guardar var locales
