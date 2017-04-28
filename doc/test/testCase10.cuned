@@ -1,5 +1,8 @@
 /* vacio  */
 
+
+int caramelo;
+
 void imprimir(int a) {
 	printi(a);
 }
@@ -33,6 +36,9 @@ void main() {
 	int numero4=200;
 	int numero=666;
 
+	caramelo=restar(numero, numero4);
+	printc("TEST CARAMELO");
+	printi(caramelo);
 	
 	printc("TEST VARIOS");
 	imprimirVarios(numero1, numero2, numero3, numero4);

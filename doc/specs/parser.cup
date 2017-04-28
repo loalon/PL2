@@ -301,13 +301,13 @@ decvariables ::= decvariables:dec variable:var
 	//dec.add(var);
 	RESULT=dec;
 :} | {:
-	ScopeIF scope = scopeManager.getCurrentScope();
-	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+	//ScopeIF scope = scopeManager.getCurrentScope();
+	//IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 	Decvariables dec = new Decvariables();
-	cb.addQuadruple("NADA"); // evita el nullpointer
-	cb.addQuadruple("NADA"); // evita el nullpointer
-	cb.addQuadruple("NADA"); // evita el nullpointer
-	dec.setIntermediateCode(cb.create());
+	//cb.addQuadruple("NADA"); // evita el nullpointer
+	//cb.addQuadruple("NADA"); // evita el nullpointer
+	//cb.addQuadruple("NADA"); // evita el nullpointer
+	//dec.setIntermediateCode(cb.create());
 	RESULT= dec;
 :};
 
@@ -598,8 +598,8 @@ variableB ::= COMMA ID:id variableB:vb //,x otra
 		ScopeIF scope = scopeManager.getCurrentScope();
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 	vb.addVariable(name);
-		cb.addQuadruple ("NADA"); //evita nulls
-	vb.setIntermediateCode(cb.create());
+		//cb.addQuadruple ("NADA"); //evita nulls
+	//vb.setIntermediateCode(cb.create());
 	RESULT=vb;			
 :}
 | COMMA ID:id //x
@@ -610,8 +610,8 @@ variableB ::= COMMA ID:id variableB:vb //,x otra
 
 	
 	VariableB vb = new VariableB(name);
-		cb.addQuadruple ("NADA"); //evita nulls
-	vb.setIntermediateCode(cb.create());
+		//cb.addQuadruple ("NADA"); //evita nulls
+	//vb.setIntermediateCode(cb.create());
 	RESULT=vb;	
 :}
 | COMMA ID:id variableC:vc // , x=3 // 
@@ -1029,10 +1029,10 @@ expAsig ::= ID:id ASSIGMENT expLog:el
 {:
 	String name=id.getLexema();
 	ScopeIF scope = scopeManager.getCurrentScope();
-	System.out.println(scope);
+
 	SymbolTableIF sTable = scope.getSymbolTable();
-	System.out.println(sTable);
-	//System.out.println(scope);
+
+
 	SymbolIF symbol= scopeManager.searchSymbol(name);
 	if (!(symbol instanceof SymbolVariable || symbol instanceof SymbolParameter))
 		semanticErrorManager.semanticFatalError(name+" no es un nombre de variable o parametro previamente declarado o dentro de alcance."+" Linea: "+id.getLine()+" Columna: "+id.getColumn());
@@ -1346,7 +1346,7 @@ sentEntrada ::= PRINTI OBRACKET ID:id CBRACKET SEMICOLON
 	} else {
 		semanticErrorManager.semanticFatalError(""+name+" no hace referencia a una variable o un parametro." +" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
 	}
-	System.out.println("AQUI5");
+	//System.out.println("AQUI5");
 	sen.setIntermediateCode(cb.create());
 	RESULT= new Sentencia();
 :}
@@ -1400,10 +1400,10 @@ sentSalida ::= PRINTC OBRACKET TCHAIN:tch CBRACKET SEMICOLON
 /************************************
 //Sentencia if
 ************************************/
-sent_if ::=
 
-/* Sentencia eliminada por recomendacion del ED en el foro 4/4/17
- IF:id OBRACKET expresion:e CBRACKET SEMICOLON 
+/************************************************************
+Sentencia eliminada por recomendacion del ED en el foro 4/4/17
+ sent_if ::= IF:id OBRACKET expresion:e CBRACKET SEMICOLON 
 {:
 	ScopeIF scope = scopeManager.getCurrentScope();
 	TypeIF type = e.getType();
@@ -1417,10 +1417,9 @@ sent_if ::=
 	RESULT= sif;
 :}
 |
+****************************************************/
 
-*/
-
-IF:id OBRACKET expresion:e CBRACKET sentencia:sThen
+sent_if ::=IF:id OBRACKET expresion:e CBRACKET sentencia:sThen
 {:
 	ScopeIF scope = scopeManager.getCurrentScope();
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
@@ -1598,10 +1597,10 @@ sentLocales ::= sentencia:sen sentLocales:sl
 :} | {: 
 	//si quito esto, genera NullPointerException!!, dejar codigo "NADA"
 	SentLocales sl= new SentLocales();
-	ScopeIF scope = scopeManager.getCurrentScope();
-	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
-	cb.addQuadruple("NADA"); // evita el nullpointer
-	sl.setIntermediateCode(cb.create());
+	//ScopeIF scope = scopeManager.getCurrentScope();
+	//IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+	//cb.addQuadruple("NADA"); // evita el nullpointer
+	//sl.setIntermediateCode(cb.create());
 	RESULT=sl; 
 :};
 		    	 
@@ -1752,11 +1751,11 @@ funcionC ::= funcionC:fc variable:var
 	RESULT=fc;
 :} | {:
 
-	ScopeIF scope = scopeManager.getCurrentScope();		
+	//ScopeIF scope = scopeManager.getCurrentScope();		
 	FuncionC fc = new FuncionC();
-	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
-	cb.addQuadruple("NADA"); // evita el nullpointer
-	fc.setIntermediateCode(cb.create());
+	//IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+	//cb.addQuadruple("NADA"); // evita el nullpointer
+	//fc.setIntermediateCode(cb.create());
 	RESULT=fc;
 :};
 
@@ -1779,9 +1778,9 @@ funcionD ::= sentencia:sen funcionD:fd
 
 	ScopeIF scope = scopeManager.getCurrentScope();		
 	FuncionD fd = new FuncionD(scope); //para declarar tipo void por defecto
-	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
-	cb.addQuadruple("NADA"); // evita el nullpointer
-	fd.setIntermediateCode(cb.create());
+	//IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+	//cb.addQuadruple("NADA"); // evita el nullpointer
+	//fd.setIntermediateCode(cb.create());
 	RESULT=fd;
 :};
 
@@ -1873,11 +1872,11 @@ mainC ::= mainC:mc variable:var
 :}
 | {:
 
-	ScopeIF scope = scopeManager.getCurrentScope();		
+	//ScopeIF scope = scopeManager.getCurrentScope();		
 	Main mc= new Main(); 
-	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
-	cb.addQuadruple("NADA"); // evita el nullpointer
-	mc.setIntermediateCode(cb.create());
+	//IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+	//cb.addQuadruple("NADA"); // evita el nullpointer
+	//mc.setIntermediateCode(cb.create());
 	RESULT=mc;
 	 
 	 
@@ -1894,10 +1893,10 @@ mainD ::= sentencia:sen mainD:md
 	RESULT=md;
 :} | {: 
 	Main md = new Main();
-	ScopeIF scope = scopeManager.getCurrentScope();
-	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
-	cb.addQuadruple("NADA"); // evita el nullpointer
-	md.setIntermediateCode(cb.create());
+	//ScopeIF scope = scopeManager.getCurrentScope();
+	//IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+	//cb.addQuadruple("NADA"); // evita el nullpointer
+	//md.setIntermediateCode(cb.create());
 	RESULT= md;
 :};
 

@@ -54,6 +54,9 @@ public class TranslatorCALL extends Translator{
 		//}
 		
 		//PARAMETROS METIDOS
+		//guardar el nivel actual de scope
+		temporal.append("MOVE /"+(DISPLAY0+1)+", #"+(level)+"\n"); 
+		
 		temporal.append("SUB .SP, #"+(parameters)+"\n"); // almaceno el valor de puntero pila.SP de antes(quito los parametros)
 		//System.out.println("numero parametros: "+(parameters+1));
 		temporal.append("MOVE .A, .R4\n"); // puntero de pila antes de la llamada, aqui volvera al cerrar RA
@@ -70,13 +73,14 @@ public class TranslatorCALL extends Translator{
 		temporal.append("ADD #"+(tempSize+1)+", .IY\n"); //porque quiero apuntar al siguiente hueco libre 
 		temporal.append("MOVE .A, .R8\n"); //puntero de pila al final de los temporales, siguiente hueco libre
 		//temporal.append("MOVE .IX, .IX\n"); 
+		temporal.append("MOVE .R5, /"+(DISPLAY0-level)+"\n"); //muevo .Ix anterior a su posicion en el display, guarda al anidante
 		temporal.append("PUSH .IX\n"); // POS ix PUSH #-2[.IX] inserta en la cima de la pila, dir maestra del RA +0
 		temporal.append("PUSH #0\n"); //valor del retorno +1
 		//temporal.append("PUSH .R7\n"); // POS IX+1dir de retorno IX+1
 		temporal.append("PUSH .R4\n"); // valor de puntero antes IX+2
 		temporal.append("PUSH .R5\n"); // valor de IX antes IX+3 enlace control
 		temporal.append("PUSH .R6\n"); // valor de IY puntero antes I4+4
-		temporal.append("PUSH #77\n"); //enlace de acceso +5
+		temporal.append("PUSH /"+(DISPLAY0-level)+"\n"); //enlace de acceso +5
 		temporal.append("PUSH #888\n"); //valor de prueba +6
 		temporal.append("PUSH #888\n"); //valor de prueba +7
 		
@@ -95,7 +99,7 @@ public class TranslatorCALL extends Translator{
 		
 		temporal.append("POP .R3\n"); //valor de prueba +7 a la basura
 		temporal.append("POP .R3\n"); //valor de prueba +6 a la basura
-		temporal.append("POP .R3\n"); //valor de prueba +5 a la basura
+		temporal.append("POP /" + (DISPLAY0-level) + "\n"); //restauro el enlace de acceso previo
 		temporal.append("POP .IY\n"); //valor de prueba +4 a la basura
 		temporal.append("POP .IX\n"); //valor de prueba +3 a la basura
 		temporal.append("POP .SP\n"); //valor de prueba +2 a la basura
