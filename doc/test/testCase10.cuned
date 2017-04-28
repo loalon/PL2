@@ -4,14 +4,60 @@ void imprimir(int a) {
 	printi(a);
 }
 
+void imprimirVarios (int a, int b, int c, int d) {
+	int tempo; 
+	tempo = (d-c);
+	printc("imprimirVarios");
+	printi(a);
+	printi(b);
+	printi(c);
+	printi(d);
+	printc("imprimirVarios tempo");
+	printi(tempo);
+	
+}
+
+int restar(int a, int b) {
+
+	int c;
+	c= a-b;
+	return c;
+}
+
 void main() {
 
+	int resultado;
+	int numero1=5;
+	int numero2=10;
+	int numero3=15;
+	int numero4=200;
 	int numero=666;
-	/*numero=666;*/
+
 	
-	printc("TEST ANTES");
+	printc("TEST VARIOS");
+	imprimirVarios(numero1, numero2, numero3, numero4);
+	
+	printc("TEST ANTES 1");
 	printi(numero);
 	imprimir(numero);
-	printc("TEST DESPUES");
+	printc("TEST DESPUES 1");
+	
+	
+	
+	printc("TEST ANTES 2");
+	printi(numero2);
+	imprimir(numero2);
+	printc("TEST DESPUES 2");
+	
+	printc("TEST RESTAR");
+	printi(numero3);
+	printi(numero2);
+	
+	resultado=restar(numero3, numero2);
+	printc("TEST RESTAR DESPUES");
+	printi(numero3);
+	printi(numero2);
+	printi(resultado);
+	
 
 }

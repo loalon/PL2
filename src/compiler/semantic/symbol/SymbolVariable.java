@@ -11,9 +11,7 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
 public class SymbolVariable extends SymbolBase
 {  
 	private int address=0;
-	//private ScopeIF scope;
-	//private TypeIF type;
-	//private String name;
+
     /**
      * Constructor for SymbolVariable.
      * @param scope The declaration scope.

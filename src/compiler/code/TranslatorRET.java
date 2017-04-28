@@ -13,7 +13,7 @@ public class TranslatorRET extends Translator {
 		Temporal result = (Temporal)quadruple.getResult();
 		if (!(result==null)) {
 			
-			//el valor de R9 tiene que pasar al temporal
+			//el valor del temporal se almacena en R9
 			temporal.append("MOVE #"+result.getAddress()+"[.IY], .R9\n"); //almacena valor en R9
 			//setInstruction("INC .R0");
 			//setInstruction(String.format("%s #-%s[.IX], [.R0]", "MOVE", op1.getAddress()));	

@@ -139,7 +139,7 @@ non terminal	Sentencia	sentEntrada;
 non terminal	Sentencia	sentencia;
 non terminal	BloqueSent	bloqueSent;
 non terminal	ArrayList<Tipo>	tiposLocales;
-non terminal	ArrayList<VariableA>	variablesLocales;
+non terminal	VariablesLocales	variablesLocales;
 non terminal	SentLocales	sentLocales;
 non terminal	Sent_if	sent_if;
 
@@ -874,7 +874,7 @@ expLog ::= expLog:e1 operador:op expLog:e2 //operacion
 		semanticErrorManager.semanticFatalError("Numero de Parametros no coincide!!!");
 
 	
-	ExpLog elog=new ExpLog(new TypeSimpleInteger(scope));
+	ExpLog elog=new ExpLog(new TypeSimpleInteger(scope), true); //identifica esta expLog como llamada
 	elog.setIntermediateCode(inf.getIntermediateCode()); //coge el codigo intermedio, se gestiona en invFunc
 	RESULT = elog;
 
@@ -1054,9 +1054,21 @@ expAsig ::= ID:id ASSIGMENT expLog:el
 		var = new Variable((SymbolVariable) symbol);
 	else if (symbol instanceof SymbolParameter) 
 		var = new Variable((SymbolParameter) symbol);
+	else
+		semanticErrorManager.semanticFatalError("ERROR GRAVE."+" Linea: "+id.getLine());
+	//algo mas complejo????
 	
-	cb.addQuadruple("MV", var, elTemp); //de temp de exp logica a la direccion de la variable
+	if(el.isCall()){
+		cb.addQuadruple("ASIG", var);
+		//cb.addQuadruple("MV", var, elTemp);
+		
+		}
+	else
+		cb.addQuadruple("MV", var, elTemp); //de temp de exp logica a la direccion de la variable
+		
 	ea.setIntermediateCode(cb.create());
+	
+	//WIP y si fuese una invocacion??
 	
 	RESULT=ea;	
 			
@@ -1089,7 +1101,13 @@ expAcceso:ea ASSIGMENT:a expLog:el
 		var = new Variable(sp);
 	}	
 	var.setOffset(offset);
-	cb.addQuadruple("MV", var, elTemp);	//mover el temp de explog a la direccion de la var de acceso mas desplazamiento
+	
+	if(el.isCall())
+		cb.addQuadruple("ASIG", var);
+	else
+		cb.addQuadruple("MV", var, elTemp); //de temp de exp logica a la direccion de la variable
+	
+	//cb.addQuadruple("MV", var, elTemp);	//mover el temp de explog a la direccion de la var de acceso mas desplazamiento
 	exp.setIntermediateCode(cb.create());	
 	RESULT = exp;
 :};
@@ -1526,8 +1544,9 @@ sentencia ::= bloqueSent:bs
 	TemporalIF temp = e.getTemporal();
 
 	cb.addQuadruple("RET", temp, new Value(scope.getLevel())); //WIP
-
+	
 	Sentencia sen = new Sentencia(true, new TypeSimpleInteger(scope));
+	sen.setTemporal(temp);
 	sen.setIntermediateCode(cb.create());
 	RESULT=sen;
 :};
@@ -1537,9 +1556,14 @@ sentencia ::= bloqueSent:bs
 ***********************************/
 			   
 bloqueSent ::= OBRACE  tiposLocales:ti variablesLocales:var sentLocales:sen  CBRACE
-{:
-	BloqueSent bs = new BloqueSent();
-	bs.setIntermediateCode(sen.getIntermediateCode());
+{: //WIP opcional quizas cambiar orden
+ 	ScopeIF scope = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+		BloqueSent bs = new BloqueSent();
+	cb.addQuadruples(var.getIntermediateCode());
+	cb.addQuadruples(sen.getIntermediateCode());
+
+	bs.setIntermediateCode(cb.create());
 	RESULT = bs;
 :};
 
@@ -1552,9 +1576,15 @@ tiposLocales ::= tipo:t tiposLocales:tl
 
 variablesLocales ::= variablesLocales:vl variable:var 
 {:
-	vl.add(var);
+ 	ScopeIF scope = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+	cb.addQuadruples(vl.getIntermediateCode());
+	cb.addQuadruples(var.getIntermediateCode());
+	vl.setIntermediateCode(cb.create());
 	RESULT=vl;
-:} | {: RESULT=new ArrayList<VariableA>(); 
+:} | {: 
+	 VariablesLocales vl= new VariablesLocales(); 
+	 RESULT=vl;
 :};
 					
 sentLocales ::= sentencia:sen sentLocales:sl	
@@ -1713,7 +1743,12 @@ funcionB ::= tipo:ti funcionB:fb
 
 funcionC ::= funcionC:fc variable:var
 {:
-	fc.setIntermediateCode(var.getIntermediateCode());
+ 	ScopeIF scope = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+	cb.addQuadruples(fc.getIntermediateCode());
+	cb.addQuadruples(var.getIntermediateCode());
+	fc.setIntermediateCode(cb.create());
+
 	RESULT=fc;
 :} | {:
 
@@ -1827,8 +1862,13 @@ mainB ::= tipo:ti mainB:mb
 {::} | {::};
 
 mainC ::= mainC:mc variable:var
-{:
-	mc.setIntermediateCode(var.getIntermediateCode());
+{: //WIP puede que tenga que invertir el orden
+	ScopeIF scope = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
+	cb.addQuadruples(mc.getIntermediateCode());
+	cb.addQuadruples(var.getIntermediateCode());
+	mc.setIntermediateCode(cb.create());
+	
 	RESULT=mc;
 :}
 | {:

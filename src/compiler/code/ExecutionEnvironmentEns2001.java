@@ -103,6 +103,8 @@ public class ExecutionEnvironmentEns2001
 		//Temporal result = (Temporal)quadruple.getResult();
     	//meter un swtich case grande
     	switch(quadruple.getOperation()) {
+			case "ASIG": //BR label NULL NULL
+				translator=new TranslatorASIG(); break;
 			case "BR": //BR label NULL NULL
 				translator=new TranslatorBR(); break;
 			case "BRF":

@@ -15,7 +15,7 @@ import es.uned.lsi.compiler.syntax.nonTerminal.NonTerminalIF;
 public abstract class NonTerminal implements NonTerminalIF
 {
     private List<QuadrupleIF> intermediateCode;
-	private LabelIF label;
+	//private LabelIF label;
 	private TemporalIF temporal;
 	//añadir fila y columna?
 	
@@ -25,7 +25,7 @@ public abstract class NonTerminal implements NonTerminalIF
     public NonTerminal () {
         super ();
         this.intermediateCode = new ArrayList<QuadrupleIF> ();
-        this.intermediateCode.add(new Quadruple("QUITAR")); //para evitar vacio
+        this.intermediateCode.add(new Quadruple("NADA")); //para evitar vacio
     }
 
     public List<QuadrupleIF> getIntermediateCode () {
@@ -35,15 +35,7 @@ public abstract class NonTerminal implements NonTerminalIF
     public void setIntermediateCode (List<QuadrupleIF> intermediateCode) {
         this.intermediateCode = intermediateCode;
     }
-	/*
-    public QuadrupleIF getCode() {
-		return code;
-	}
-	
-	public void setCode(QuadrupleIF code) {
-		this.code = code;
-	}
-	*/
+
     /*
 	public LabelIF getLabel() {
 		return label;
