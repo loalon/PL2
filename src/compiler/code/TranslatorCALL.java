@@ -55,7 +55,7 @@ public class TranslatorCALL extends Translator{
 		
 		//PARAMETROS METIDOS
 		//guardar el nivel actual de scope
-		temporal.append("MOVE /"+(DISPLAY0+1)+", #"+(level)+"\n"); 
+		temporal.append("MOVE #"+(level)+", /"+(DISPLAY0+1)+"\n"); 
 		
 		temporal.append("SUB .SP, #"+(parameters)+"\n"); // almaceno el valor de puntero pila.SP de antes(quito los parametros)
 		//System.out.println("numero parametros: "+(parameters+1));
