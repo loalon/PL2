@@ -1,0 +1,30 @@
+
+#define TRUE 1;
+#define FALSE 1;
+#define RESPUESTA 42;
+
+struct NumerosPares {
+	int dos;
+	int cuatro;
+	int seis;
+	int ocho;
+	int diez;
+} 
+
+struct NumerosImpares {
+	int uno;
+	int tres;
+	int cinco;
+	int siete;
+	int nueve;
+} 
+
+struct Numeros {
+	NumerosPares numPares;
+	NumerosImpares numImpares;
+} 
+
+
+void main () {
+
+}

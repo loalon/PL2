@@ -7,8 +7,6 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
  * Class for SymbolFunction.
  */
 
-// TODO: Student work
-//       Include properties to characterize function calls
 
 public class SymbolFunction  extends SymbolProcedure
 {
@@ -16,7 +14,7 @@ public class SymbolFunction  extends SymbolProcedure
 	//private TypeIF type;
 	//private String name;
 	//private int numeroParametros;
-	private int size;
+	//private int size;
     /**
      * Constructor for SymbolFunction.
      * @param scope The declaration scope.

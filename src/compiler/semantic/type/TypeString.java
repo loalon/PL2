@@ -5,12 +5,13 @@ import es.uned.lsi.compiler.semantic.type.TypeBase;
 
 public class TypeString extends TypeBase
 {
-    private String cadena="";
+   // private String cadena="";
         
 	public TypeString(ScopeIF scope) 
 	{
 		super(scope, "STRING");		
 	}
+	/*
 	public TypeString(ScopeIF scope, String cadena) 
 	{
 		this(scope);
@@ -27,6 +28,6 @@ public class TypeString extends TypeBase
 	public int getSize() {
 		return cadena.length();
 	}
-	
+	*/
 
 }

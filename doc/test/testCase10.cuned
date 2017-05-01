@@ -1,5 +1,25 @@
 /* vacio  */
 
+struct NumerosPares {
+	int dos;
+	int cuatro;
+	int seis;
+	int ocho;
+	int diez;
+} 
+
+struct NumerosImpares {
+	int uno;
+	int tres;
+	int cinco;
+	int siete;
+	int nueve;
+} 
+
+struct Numeros {
+	NumerosPares numPares;
+	NumerosImpares numImpares;
+} 
 
 int caramelo;
 
@@ -29,12 +49,39 @@ int restar(int a, int b) {
 
 void main() {
 
+	struct Patatas {
+		int barbacoa;
+		int alioli;
+		
+	} 
+	
 	int resultado;
 	int numero1=5;
 	int numero2=10;
 	int numero3=15;
 	int numero4=200;
 	int numero=666;
+	int resul6;
+	
+
+
+	Numeros nums, numes;
+	nums.numPares.dos=2;
+	nums.numPares.ocho=8;
+	nums.numPares.seis=6;
+	
+	resul6 = restar(nums.numPares.ocho, nums.numPares.dos);
+	
+	if (resul6 == nums.numPares.seis){
+		printc("TEST resul6 con structs");
+		printc("el resultado debe ser 6: ");
+		printi(resul6);
+		printc("el contenido del struct tiene que ser 6: ");
+		printi(nums.numPares.seis);
+	
+	} else {
+		printc("ha fallado el test ");
+	}
 
 	caramelo=restar(numero, numero4);
 	printc("TEST CARAMELO");

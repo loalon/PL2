@@ -27,10 +27,14 @@ public class TranslatorPRINT extends Translator{
 		//un value
 		if (result instanceof Value) {
 			Value val = (Value) result;
+			
 			if (val.getValue() instanceof Integer) { 
 				temporal.append("WRINT #"+val.getValue()+"\n");
 				temporal.append("WRCHAR #10"); 
-			} 
+			} else if (val.getValue() instanceof String) { 
+				temporal.append("WRSTR /"+val.getValue()+"\n"); //hago referencia a la etiqueta
+				temporal.append("WRCHAR #10"); 
+			}
 		}
 		
 		//si es un variable

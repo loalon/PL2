@@ -4,36 +4,17 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class Expresion extends NonTerminal {
 
-	private TypeIF tipo=null;
-	//private boolean isBool=false;
+	private TypeIF type=null;
 	
-	public Expresion() 
-	{
+	public Expresion() {
 		super();
 	}
-	public Expresion(TypeIF tipo)
-	{
+	public Expresion(TypeIF type){
 		this();
-		this.tipo = tipo;
+		this.type = type;
 	}
-	/*
-	public Expresion(TypeIF tipo, boolean isBool)
-	{
-		this(tipo);
-		this.isBool = isBool;
-	}
-	*/
 	public TypeIF getType()	{
-		return tipo;
+		return type;
 	}
-	/*
-	public void setType(TypeIF tipo) {
-		this.tipo = tipo;
-	}
-	*/
-	/*
-	public boolean isBool() {
-		return isBool;
-	}
-	*/
+
 }

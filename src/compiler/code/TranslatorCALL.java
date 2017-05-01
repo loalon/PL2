@@ -81,8 +81,8 @@ public class TranslatorCALL extends Translator{
 		temporal.append("PUSH .R5\n"); // valor de IX antes IX+3 enlace control
 		temporal.append("PUSH .R6\n"); // valor de IY puntero antes I4+4
 		temporal.append("PUSH /"+(DISPLAY0-level)+"\n"); //enlace de acceso +5
-		temporal.append("PUSH #888\n"); //valor de prueba +6
-		temporal.append("PUSH #888\n"); //valor de prueba +7
+		//temporal.append("PUSH #888\n"); //valor de prueba +6
+		//temporal.append("PUSH #888\n"); //valor de prueba +7
 		
 		temporal.append("MOVE .R8, .SP\n"); //situa el puntero alfinal de los temporales para que empiece el nuevo procedimiento (siguiente hueco libre)
 		//hasta aqui el registro de activacion
@@ -97,8 +97,8 @@ public class TranslatorCALL extends Translator{
 		//ahora a desapilar
 		
 		
-		temporal.append("POP .R3\n"); //valor de prueba +7 a la basura
-		temporal.append("POP .R3\n"); //valor de prueba +6 a la basura
+		//temporal.append("POP .R3\n"); //valor de prueba +7 a la basura
+		//temporal.append("POP .R3\n"); //valor de prueba +6 a la basura
 		temporal.append("POP /" + (DISPLAY0-level) + "\n"); //restauro el enlace de acceso previo
 		temporal.append("POP .IY\n"); //valor de prueba +4 a la basura
 		temporal.append("POP .IX\n"); //valor de prueba +3 a la basura

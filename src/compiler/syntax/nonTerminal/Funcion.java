@@ -6,28 +6,28 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class Funcion extends NonTerminal {
 
-	private TypeIF tipo=null;
-	private String nombre;
+	private TypeIF type=null;
+	private String name;
 	private ArrayList<String> parameters;
 	
 	public Funcion () {
 		super();
 		this.parameters = new ArrayList<String>();
 	}
-	public Funcion (String nombre, TypeIF tipo) {
+	public Funcion (String name, TypeIF type) {
 		this();
-		this.tipo=tipo;
-		this.nombre=nombre;
+		this.type=type;
+		this.name=name;
 	}
-	public Funcion (String nombre, TypeIF tipo, ArrayList<String> parameters) {
-		this(nombre,tipo);
+	public Funcion (String name, TypeIF type, ArrayList<String> parameters) {
+		this(name, type);
 		this.parameters=parameters;
 	}
 	public String getNombre () {
-		return nombre;
+		return name;
 	}
 	public TypeIF getTipo () {
-		return tipo;
+		return type;
 	}	
 	public ArrayList<String> getParameters () {
 		return parameters;

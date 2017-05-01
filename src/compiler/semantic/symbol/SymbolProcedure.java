@@ -8,12 +8,9 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
  * Class for SymbolProcedure.
  */
 
-// TODO: Student work
-//       Include properties to characterize procedure calls
-
 public class SymbolProcedure extends SymbolBase
 {
-	private int numeroParametros=0;
+	private int numberOfParameters=0;
     /**
      * Constructor for SymbolProcedure.
      * @param scope The declaration scope.
@@ -25,15 +22,15 @@ public class SymbolProcedure extends SymbolBase
         super (scope, name, type);
 
     } 	
-    public SymbolProcedure (ScopeIF scope, String name, TypeIF type, int numeroParametros)
+    public SymbolProcedure (ScopeIF scope, String name, TypeIF type, int numberOfParameters)
     {
         this (scope, name, type);
-        this.numeroParametros=numeroParametros;
+        this.numberOfParameters=numberOfParameters;
     } 
 	public int getNumeroParametros(){
-		return numeroParametros;
+		return numberOfParameters;
 	}
-	public void setNumeroParametros(int numeroParametros){
-		this.numeroParametros = numeroParametros;
+	public void setNumeroParametros(int numberOfParameters){
+		this.numberOfParameters = numberOfParameters;
 	}
 }
