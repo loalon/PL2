@@ -27,7 +27,7 @@ void imprimirTestIterativo (int veces) {
 void main() {
 
 	printc("TEST recursivo");
-	/*imprimirTestRecursivo(5);*/
+	imprimirTestRecursivo(5);
 	printc("TEST iterativo");
 	imprimirTestIterativo(5);
 }
