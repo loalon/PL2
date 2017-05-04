@@ -23,7 +23,7 @@ public class SymbolConstantString extends SymbolBase
 		String cad2=value.replace("\"", ""); //quitar comillas del lexema
 		cad2 += "\0"; //para que WRSTR detecte el fin necesita retorno de carro
 		this.value=cad2;
-		System.out.println(value);
+		//System.out.println(value);
 	}
 	public String getValue() {
 		return value;

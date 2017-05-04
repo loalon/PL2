@@ -30,7 +30,8 @@ public class SymbolProcedure extends SymbolBase
 	public int getNumeroParametros(){
 		return numberOfParameters;
 	}
-	public void setNumeroParametros(int numberOfParameters){
+	public void setNumberOfParameters(int numberOfParameters){
 		this.numberOfParameters = numberOfParameters;
 	}
+
 }

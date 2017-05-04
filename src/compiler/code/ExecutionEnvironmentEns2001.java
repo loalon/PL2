@@ -115,6 +115,10 @@ public class ExecutionEnvironmentEns2001
 				translator = new TranslatorBRT(); break;
 			case "CALL":
 				translator = new TranslatorCALL(); break;
+			case "CALLB":
+				translator = new TranslatorCALLB(); break;
+			case "CALLC":
+				translator = new TranslatorCALLC(); break;
 			case "HALT":
 				translator = new TranslatorHALT(); break;
 			case "EQ":

@@ -19,11 +19,15 @@ public class TranslatorASIG extends Translator {
 		
 		if(var.getScope().getLevel()==0){ //scope global
 			temporal.append("MOVE #1[.IX], /"+var.getAddress()+"\n"); //se mueve a la direccion global reservada
-		System.out.println("la var asignada global "+var.getName()+" tiene scope "+ var.getScope().getLevel()+"\n");
+		//System.out.println("la var asignada global "+var.getName()+" tiene scope "+ var.getScope().getLevel()+"\n");
 		}else {
+			
+			//WIP quizas meter aqui guardar en glocal
+			
+			
 			//if(var.isParameter()) {
-				System.out.println("la var asignada "+var.getName()+" tiene scope "+ var.getScope().getLevel()+"\n");
-				temporal.append("MOVE #1[.IX], #"+(var.getAddress()+SIZE_RA+1)+"[.IX] \n"); //OK, lo mueve a la variable que corresponde
+				//System.out.println("la var asignada "+var.getName()+" tiene scope "+ var.getScope().getLevel()+"\n");
+				temporal.append("MOVE #1[.IX], #"+(var.getAddress()+SIZE_RA)+"[.IX] \n"); //OK, lo mueve a la variable que corresponde
 			//} else {
 			//	temporal.append("MOVE #"+ from.getAddress()+"[.IY], #"+(to.getAddress()+1)+"[.IX] \n");
 				//temporal.append("ADD #"+SIZE_RA+", .IX\n"); //la septima posicion desde Ix comienza a guardar var locales

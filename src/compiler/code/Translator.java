@@ -4,7 +4,7 @@ import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 
 public abstract class Translator {
 
-	protected int SIZE_RA=5;//7 para las pruebas
+	protected int SIZE_RA=6;//7 para las pruebas
 	protected int DISPLAY0;
 	StringBuilder temporal=new StringBuilder();
 	

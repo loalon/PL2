@@ -1,0 +1,56 @@
+/* vacio  */
+
+int varNivel0=5555;
+
+
+void f () { 
+
+	int a =110, b= 111;
+	printc("en nivel 1");
+	printc("debe imprimir (110)");
+	printi (a); /* Escribe 110, referencia no local */
+	printc("debe imprimir (111)");
+	printi (b); /* Escribe 111, referencia no local */
+	printc("debe imprimir (5555)");
+	printi (varNivel0); /* Escribe 5555, referencia global */
+	
+		
+	{ int a =220, c= 221;
+		printc("en nivel 2");
+		printc("debe imprimir (220)");
+		printi (a); /* Escribe 2, referencia no local */ 
+		printc("debe imprimir (111)");
+		printi (b); /* Escribe 1, referencia no local */ 
+		printc("debe imprimir (221)");
+		printi (c); /* Escribe 2, referencia no local */ 
+		{int d=300;
+			printc("en nivel 3");
+			printc("debe imprimir (220)");
+			printi (a); /* Escribe 2, referencia no local */
+			printc("debe imprimir (111)"); 
+			printi (b); /* Escribe 1, referencia no local */
+			printc("debe imprimir (221)"); 
+			printi (c); /* Escribe 2, referencia no local */
+			printc("debe imprimir (300)");
+			printi (d); /* Escribe 2, referencia no local */	
+		 	printi (varNivel0); /* Escribe 5555, referencia global */
+		}
+		printc("en nivel 2, tras salir del bucle");
+		printc("debe imprimir (220)");
+		printi (a); /* Escribe 2, referencia no local */
+		printc("debe imprimir (111)"); 
+		printi (b); /* Escribe 1, referencia no local */
+		printc("debe imprimir (221)"); 
+		printi (c); /* Escribe 2, referencia no local */ 
+		
+	}
+
+	printc("saliendo de la funcion");
+}
+
+void main() {
+
+	
+	f();
+	printc("ha regresado de la funcion");
+}

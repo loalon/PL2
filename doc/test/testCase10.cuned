@@ -21,7 +21,8 @@ struct Numeros {
 	NumerosImpares numImpares;
 } 
 
-int caramelo;
+int acumuladorGlobal;
+int varNivel0=789;
 
 void imprimir(int a) {
 	printi(a);
@@ -30,14 +31,52 @@ void imprimir(int a) {
 void imprimirVarios (int a, int b, int c, int d) {
 	int tempo; 
 	tempo = (d-c);
-	printc("imprimirVarios");
+	printc("ejecutando imprimirVarios");
 	printi(a);
 	printi(b);
 	printi(c);
 	printi(d);
-	printc("imprimirVarios tempo");
+	printc("resta de numero4 y numero3 dentro de la funcion con var local");
 	printi(tempo);
 	
+}
+void prueba1() {
+	printc("Prueba sin retorno");
+}
+
+void imprimirTestRecursivo (int veces) {
+	if(veces==0) { /*nivel2*/
+		printc("Este es el caso trivial. Veces deberia ser (0): ");
+		printi(veces);
+	} else { /*nivel 2*/
+		printc("Este es el caso no trivial. Quedan tantas veces: ");
+		printi(veces);
+		imprimirTestRecursivo(veces-1);
+	}	
+}
+/*
+void imprimirTestIterativoRecursivo (int veces) {
+	int i;
+	for (i=veces; i==0; i=i-1)
+	{
+		printc("Prueba de impresion. Veces deberia ser (0): ");
+		printi(veces);
+	}
+		
+}
+*/
+void f () { 
+	int a=100, b = 1010; 
+	varNivel0=5555;
+	{ int a=285, c = 2722; /*nivel2*/
+		{ int d = 3489; /*nivel3*/
+			printi (a); /* Escribe 2, referencia no local */ 
+			printi (b); /* Escribe 1, referencia no local */ 
+			printi (c); /* Escribe 2, referencia no local */ 
+			printi (d); /* Escribe 3, referencia local */ 
+			printi (varNivel0); /* Escribe 5555, referencia global */
+		} 
+	}
 }
 
 int restar(int a, int b) {
@@ -60,10 +99,10 @@ void main() {
 	int numero2=10;
 	int numero3=15;
 	int numero4=200;
-	int numero=666;
+	int numero=888;
 	int resul6;
 	
-
+	int varNivel1=555;
 
 	Numeros nums, numes;
 	nums.numPares.dos=2;
@@ -71,47 +110,58 @@ void main() {
 	nums.numPares.seis=6;
 	
 	resul6 = restar(nums.numPares.ocho, nums.numPares.dos);
+
+/*	printc("TEST recursivo");
+	imprimirTestRecursivo(5);
+	printc("TEST iterativo");
+	f();*/
+	/*imprimirTestIterativoRecursivo(6);*/
 	
-	if (resul6 == nums.numPares.seis){
+	printc("TEST operaciones");
+	if (resul6 == nums.numPares.seis){/*nivel2*/
 		printc("TEST resul6 con structs");
 		printc("el resultado debe ser 6: ");
 		printi(resul6);
 		printc("el contenido del struct tiene que ser 6: ");
 		printi(nums.numPares.seis);
 	
-	} else {
+	} else { /*nivel2*/
 		printc("ha fallado el test ");
 	}
-
-	caramelo=restar(numero, numero4);
-	printc("TEST CARAMELO");
-	printi(caramelo);
+	printc("TEST ACUMULADOR GLOBAL");
+	acumuladorGlobal=restar(numero, numero4);
+	printi(acumuladorGlobal);
 	
-	printc("TEST VARIOS");
+	printc("**************************************************");
+	printc("TEST LLAMADA CON VARIOS PARAMETROS");
+	printc("un mensaje de aviso de ejecucion");
+	printc("debe imprimir 5, 10, 15 y 200: ");
+	printc("y la resta de 200 y 15 -> 185");
 	imprimirVarios(numero1, numero2, numero3, numero4);
 	
-	printc("TEST ANTES 1");
+	printc("**************************************************");
+	
+	printc("TEST LLAMADA FUNCION");
+	printc("numero antes de la operacion debe valer 888: ");
 	printi(numero);
+	printc("la funcion debe imprimir el numero: ");
 	imprimir(numero);
-	printc("TEST DESPUES 1");
 	
-	printc("TEST ANTES 2");
-	printi(numero2);
-	imprimir(numero2);
-	printc("TEST DESPUES 2");
+	printc("**************************************************");
 	
-	printc("TEST RESTAR");
-	printi(numero3);
-	printi(numero2);
-	
+	printc("TEST RESTAR, ASIGNACION, INVOCAR Y PASO POR VALOR");
+	printc("numero3 antes de la operacion debe valer 15: ");
+	printi(numero3); /*15*/
+	printc("numero2 antes de la operacion debe valer 10: ");
+	printi(numero2);/*10*/
+	printc("resultado tras la operacion debe valer 5: ");
 	resultado=restar(numero3, numero2);
-	printc("TEST RESTAR ANTES");
-	printi(numero3);
-	printi(numero2);
-	printc("TEST RESTAR DESPUES ");
-		printi(numero3);
-	printi(numero2);
-	printi(resultado);
+	printi(resultado);/*5*/
+	printc("numero3 despues de la operacion debe valer 15: ");
+	printi(numero3); /*15*/
+	printc("numero2 despues de la operacion debe valer 10: ");
+	printi(numero2);/*10*/
 	
+	printc("**************************************************");
 
 }

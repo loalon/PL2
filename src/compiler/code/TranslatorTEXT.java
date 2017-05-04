@@ -11,7 +11,7 @@ public class TranslatorTEXT extends Translator{
 		
 		Value name = (Value) quadruple.getResult();
 		Value cadena = (Value) quadruple.getFirstOperand();
-		System.out.println(""+name.getValue()+": DATA \""+cadena.getValue()+"\"");
+		//System.out.println(""+name.getValue()+": DATA \""+cadena.getValue()+"\"");
 		return ""+name.getValue()+": DATA \""+cadena.getValue()+"\"";
 	}
 }
