@@ -1,7 +1,12 @@
 /* vacio  */
 
+void f(int vez) {
+	int ene=234;
+	printi(vez);
+}
 
 void main() {
-
+	int a=77;
+	f(a);
 
 }

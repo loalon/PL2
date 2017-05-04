@@ -1,0 +1,33 @@
+/* vacio  */
+
+int varNivel0=5555;
+
+void imprimirTestRecursivo (int veces) {
+	if(veces==0) { /*nivel2*/
+		printc("Este es el caso trivial. Veces deberia ser (0): ");
+		printi(veces);
+	} else { /*nivel 2*/
+		printc("Este es el caso no trivial. Quedan tantas veces: ");
+		printi(veces);
+		imprimirTestRecursivo(veces-1);
+	}	
+}
+
+void imprimirTestIterativo (int veces) {
+	int i;
+	for (i=veces; i==0; i=i-1)
+	{
+		printi(veces);
+		printc("Prueba de impresion. Quedan estas veces (0): ");
+		printi(i);
+	}
+		
+}
+
+void main() {
+
+	printc("TEST recursivo");
+	/*imprimirTestRecursivo(5);*/
+	printc("TEST iterativo");
+	imprimirTestIterativo(5);
+}

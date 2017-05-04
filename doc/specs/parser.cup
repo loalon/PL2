@@ -197,7 +197,7 @@ program ::=
 			Temporal t = (Temporal) temp;
 			System.out.println(t.getName());
 			System.out.println(t.getScope());
-			t.setAddress (lOffset + t.getSize());
+			t.setAddress (lOffset); //+ t.getSize());
 			lOffset += t.getSize();
 		}
 	}
@@ -1311,7 +1311,7 @@ sentEntrada ::= PRINTI OBRACKET ID:id CBRACKET SEMICOLON
 {:
 	ScopeIF scope = scopeManager.getCurrentScope();
 	String name = id.getLexema();
-
+	System.out.println("ALERTA!!!!!!!!!!!");
 	if(!scopeManager.containsSymbol(name))
 		semanticErrorManager.semanticFatalError("Variable : "+name+" no ha sido declarada." +" Linea: " +id.getLine() +" Columna: "+ id.getColumn());
 

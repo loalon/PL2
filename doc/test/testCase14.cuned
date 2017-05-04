@@ -1,0 +1,30 @@
+/* vacio  */
+
+int varNivel0=5555;
+
+
+void main() {
+
+	int a =5;
+	int b=1000;
+	
+	printc("primer bucle for");
+	printc("debe imprimir desde 5 a 1");
+	for (a=5;a==0;a=a-1) 
+		printi(a);
+
+			
+		a=100;
+	
+	/* con bloque */
+	printc("segundo bucle for");
+	printc("debe imprimir 100 a 95");
+	printc("el valor de b antes es 1000");
+	printi(b);	 
+	for (a=100;a==94;a=a-1){ 
+		printi(a);
+		b=b-1;	
+	}
+	printc("el valor de b antes es 994");
+	printi(b);
+}

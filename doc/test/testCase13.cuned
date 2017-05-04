@@ -1,0 +1,30 @@
+/* vacio  */
+
+int varNivel0=5555;
+
+
+void main() {
+
+	int a =2;
+	
+	printc("comprueba si es 3");
+	if(a==3){
+		printc("Es 3");
+	} else {
+		printc("No es 3");
+	}
+	
+	printc("comprueba si mayor que es 3");
+	if(a>3){
+		printc("Es mayor que 3");
+	} else {
+		printc("No es mayor que 3");
+	}
+	
+	printc("comprueba si mayor que es 1");
+	if(a>1){
+		printc("Es mayor que 1");
+	} else {
+		printc("No es mayor que 1");
+	}
+}

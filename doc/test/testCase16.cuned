@@ -1,0 +1,24 @@
+/* vacio  */
+
+int varNivel0=5555;
+
+void imprimirTestRecursivo (int vet) {
+
+	int veces=vet;
+	if(veces==0) {
+		printc("Este es el caso trivial. Veces deberia ser (0): ");
+		printi(veces);
+	} else { 
+		printc("Este es el caso no trivial. Quedan tantas veces: ");
+		printi(veces);
+		imprimirTestRecursivo(veces-1);
+	}	
+}
+
+
+void main() {
+
+	printc("TEST recursivo");
+	imprimirTestRecursivo(5);
+
+}

@@ -96,8 +96,8 @@ public class ExecutionEnvironmentEns2001
     {      
     	Translator translator=null;
     	
-    	if (quadruple.getOperation().equals("NADA"))
-    		return "";
+    	//if (quadruple.getOperation().equals("NADA"))
+    		//return "";
     	//StringBuilder temporal=new StringBuilder();; //almacena el string
 
 		//Temporal operand1 = (Temporal)quadruple.getFirstOperand();
@@ -129,8 +129,8 @@ public class ExecutionEnvironmentEns2001
     			translator = new TranslatorINL(); break;			
 			case "MV":
 				translator = new TranslatorMV(); break;				
-			//case "NADA":
-				//translator = new TranslatorNADA(); break;
+			case "NADA":
+				translator = new TranslatorNADA(); break;
 			case "OR":
     			translator = new TranslatorOR(); break;
 			case "ORG":

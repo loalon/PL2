@@ -79,7 +79,7 @@ public class TranslatorCALL extends Translator{
 		temporal.append("ADD #"+(varSize+SIZE_RA)+", .IX\n"); //iX+7+tamaño variables dan la posicion de IY
 		
 		temporal.append("MOVE .A, .IY\n"); //establezco desde donde se almacenan los temporales
-		temporal.append("ADD #"+(tempSize+1)+", .IY\n"); //porque quiero apuntar al siguiente hueco libre 
+		temporal.append("ADD #"+(tempSize)+", .IY\n"); //porque quiero apuntar al siguiente hueco libre 
 		System.out.println("Temporales size "+tempSize);
 		temporal.append("MOVE .A, .R8\n"); //puntero de pila al final de los temporales, siguiente hueco libre
 		//temporal.append("MOVE .IX, .IX\n"); 
@@ -116,7 +116,7 @@ public class TranslatorCALL extends Translator{
 		
 		//OJO!!! lo siguiente almacena en el .IX del llamante!!!
 		temporal.append("MOVE .R9, #1[.IX]\n"); // inserta el resultado en la direccion referenciada por el A (IX+1)
-		temporal.append("MOVE #"+(level-1)+", /"+(DISPLAY0+1)+"\n"); //resto un nivel de ejecucion
+		//temporal.append("MOVE #"+(level-1)+", /"+(DISPLAY0+1)+"\n"); //resto un nivel de ejecucion
 		//temporal.append("MOVE #"+result.getAddress()+"[.IY], .R9\n"); //almacena valor en R9
 		return  temporal.toString();
 		//return  ("BR /L_"+ quadruple.getResult().toString());

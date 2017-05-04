@@ -38,6 +38,7 @@ public class TranslatorOR extends Translator {
 		temporal.append(label1+":"+"\n"); //etiqueta si verdadero
 		temporal.append("MOVE #1, #"+result.getAddress()+"[.IY]\n"); //guarda en el temporal 1 por ser verdad
 		temporal.append(labelEnd+":"+"\n"); //etiqueta si verdadero
+		temporal.append("NOP\n");
 		return temporal.toString();
 	}
 

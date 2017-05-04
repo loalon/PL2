@@ -6,6 +6,7 @@ public class TranslatorNADA extends Translator{
 	
 	@Override
 	protected String translate(QuadrupleIF quadruple) {
-		return  ("");
+		temporal.append("");
+		return  temporal.toString();
 	}
 }

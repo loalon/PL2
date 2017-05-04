@@ -27,6 +27,7 @@ public class TranslatorEQ extends Translator{
 		temporal.append(labelT+":"+"\n"); //etiqueta si verdadero
 		temporal.append("MOVE #1, #"+result.getAddress()+"[.IY]\n"); //guarda en el temporal 1 por ser verdad
 		temporal.append(labelF+":"+"\n"); //etiqueta si falso		
+		temporal.append("NOP\n"); 		
 		return temporal.toString();
 	}
 }
