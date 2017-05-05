@@ -2,11 +2,15 @@ package compiler.code;
 
 import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 
+/**
+ * Clase abstracta que los traductores heredan
+ */
+
 public abstract class Translator {
 
-	protected int SIZE_RA=6;//7 para las pruebas
-	protected int DISPLAY0;
-	StringBuilder temporal=new StringBuilder();
+	protected int SIZE_RA=6; //este es el tamaño del RA
+	protected int DISPLAY0; // aqui empieza el array del display
+	StringBuilder temporal=new StringBuilder(); //aqui se construye el string
 	
 	public Translator() {	
 		

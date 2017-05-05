@@ -3,7 +3,6 @@ package compiler.code;
 import java.util.Arrays;
 import java.util.List;
 
-import compiler.intermediate.Temporal;
 import compiler.semantic.type.TypeSimple;
 
 import es.uned.lsi.compiler.code.ExecutionEnvironmentIF;
@@ -96,18 +95,10 @@ public class ExecutionEnvironmentEns2001
     {      
     	Translator translator=null;
     	
-    	//if (quadruple.getOperation().equals("NADA"))
-    		//return "";
-    	//StringBuilder temporal=new StringBuilder();; //almacena el string
-
-		//Temporal operand1 = (Temporal)quadruple.getFirstOperand();
-		//Temporal operand2 = (Temporal)quadruple.getSecondOperand();	
-		//Temporal result = (Temporal)quadruple.getResult();
-    	//meter un swtich case grande
     	switch(quadruple.getOperation()) {
-			case "ASIG": //BR label NULL NULL
+			case "ASIG": 
 				translator=new TranslatorASIG(); break;
-			case "BR": //BR label NULL NULL
+			case "BR": 
 				translator=new TranslatorBR(); break;
 			case "BRF":
 				translator=new TranslatorBRF(); break;
@@ -115,10 +106,10 @@ public class ExecutionEnvironmentEns2001
 				translator = new TranslatorBRT(); break;
 			case "CALL":
 				translator = new TranslatorCALL(); break;
-			case "CALLB":
-				translator = new TranslatorCALLB(); break;
-			case "CALLC":
-				translator = new TranslatorCALLC(); break;
+			case "B_START":
+				translator = new TranslatorB_START(); break;
+			case "B_END":
+				translator = new TranslatorB_END(); break;
 			case "HALT":
 				translator = new TranslatorHALT(); break;
 			case "EQ":
@@ -150,7 +141,7 @@ public class ExecutionEnvironmentEns2001
     		default:
     			break;
 		}
-    	translator.setMaxAddress(MAX_ADDRESS);
-    	return translator.translate(quadruple);
+    	translator.setMaxAddress(MAX_ADDRESS); //para saber donde empieza el display array
+    	return translator.translate(quadruple); //ejecuta la traduccion
     }
 }

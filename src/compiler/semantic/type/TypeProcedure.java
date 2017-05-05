@@ -1,22 +1,17 @@
 package compiler.semantic.type;
 
-import java.util.List;
-
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.type.TypeBase;
-import es.uned.lsi.compiler.semantic.type.TypeIF;
+
 
 /**
  * Class for TypeProcedure.
  */
 
-// TODO: Student work
-//       Include properties to characterize procedure declarations
-
 public class TypeProcedure extends TypeBase
 {   
-	private String name;
-	private List<TypeIF> parameters;
+	//private String name;
+	//private List<TypeIF> parameters;
 	ScopeIF scope;
    /**
      * Constructor for TypeProcedure.

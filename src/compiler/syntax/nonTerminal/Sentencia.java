@@ -25,7 +25,7 @@ public class Sentencia extends NonTerminal {
 	public boolean isReturn (){
 		return isReturn;
 	}
-	public TypeIF getTipoRetorno (){
+	public TypeIF getReturnType (){
 		return returnType;
 	}
 

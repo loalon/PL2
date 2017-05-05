@@ -5,9 +5,14 @@ import es.uned.lsi.compiler.intermediate.LabelFactory;
 import es.uned.lsi.compiler.intermediate.LabelIF;
 import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 
+/**
+ * Clase traductora para las operaciones EQ
+ * Guarda 1 en el temporal si es cierto
+ */
+
 public class TranslatorEQ extends Translator{
 	
-	StringBuilder temporal=new StringBuilder();
+	//StringBuilder temporal=new StringBuilder();
 	
 	@Override
 	protected String translate(QuadrupleIF quadruple) {

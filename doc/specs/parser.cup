@@ -89,7 +89,7 @@ terminal Token TCHAIN;
 // no modificar los propuestos
 
 non terminal	program;
-non terminal Axiom		axiom;
+non terminal AxiomNT		axiom;
 
 non terminal Constante constanteS;
 non terminal Constante constante;
@@ -105,10 +105,10 @@ non terminal	VariableA variable;
 non terminal	VariableA	variableA;
 non terminal	VariableB	variableB;
 non terminal	VariableC	variableC;
-non terminal	Decvariables	decvariables;
+non terminal	NonTerminalGeneric	decvariables;
 
 non terminal	ExpLog	expLog;
-non terminal	Operador	operador;
+non terminal	String	operador;
 non terminal	Expresion	expAsig;
 non terminal	ExpAcceso	expAcceso;
 non terminal	Expresion	expresion;
@@ -119,27 +119,27 @@ non terminal	InvFuncA	invFuncA;
 non terminal	Funcion    funcion;
 non terminal	FuncionA funcionA;
 non terminal	ArrayList<Tipo>	funcionB;
-non terminal	FuncionC	funcionC;
+non terminal	NonTerminalGeneric	funcionC;
 non terminal	FuncionD	funcionD;
 non terminal	FuncionE	funcionE;
 non terminal	FuncionS	funcionS;
-non terminal	Decfunciones	decfunciones;
+non terminal	NonTerminalGeneric	decfunciones;
 
-non terminal	Main	main;
-non terminal	Main	mainA;
-non terminal	Main	mainB;
-non terminal	Main	mainC;
-non terminal	Main	mainD;
+non terminal	NonTerminalGeneric	main;
+non terminal	NonTerminalGeneric	mainA;
+non terminal	NonTerminalGeneric	mainB;
+non terminal	NonTerminalGeneric	mainC;
+non terminal	NonTerminalGeneric	mainD;
 
-non terminal 	SentFor	sentFor;
+non terminal 	NonTerminalGeneric	sentFor;
 non terminal	SentForA	sentForA;
 non terminal	Sentencia	sentSalida;
 non terminal	Sentencia	sentEntrada;
 non terminal	Sentencia	sentencia;
-non terminal	BloqueSent	bloqueSent;
+non terminal	NonTerminalGeneric	bloqueSent;
 non terminal	ArrayList<Tipo>	tiposLocales;
-non terminal	VariablesLocales	variablesLocales;
-non terminal	SentLocales	sentLocales;
+non terminal	NonTerminalGeneric	variablesLocales;
+non terminal	NonTerminalGeneric	sentLocales;
 non terminal	Sent_if	sent_if;
 
 // Declaracion de relaciones de precedencia
@@ -252,7 +252,7 @@ axiom ::= decconstantes:dec dectipos:det decvariables:dev decfunciones:def
 {:
 	ScopeIF scope = scopeManager.getCurrentScope();
 	TypeTableIF tTable = scope.getTypeTable();
-	Axiom ax = new Axiom();
+	AxiomNT ax = new AxiomNT();
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 
 	cb.addQuadruples(dev.getIntermediateCode()); //activar al final 
@@ -264,14 +264,14 @@ axiom ::= decconstantes:dec dectipos:det decvariables:dev decfunciones:def
 
 decconstantes ::= constanteS:css decconstantes:dcc 
 {:
-	String name = css.getNombre();
+	String name = css.getName();
 	ScopeIF scope = scopeManager.getCurrentScope();
 	SymbolTableIF sTable = scope.getSymbolTable ();
 	
 	if (sTable.containsSymbol(name))
 		semanticErrorManager.semanticFatalError("Constante: "+name+" duplicada");
 
-	SymbolConstant sc = new SymbolConstant(scope, name, new TypeSimpleInteger(scope), css.getValor()); 
+	SymbolConstant sc = new SymbolConstant(scope, name, new TypeSimpleInteger(scope), css.getValue()); 
 	sTable.addSymbol(name, sc);
 	
 :} | {:
@@ -296,14 +296,14 @@ decvariables ::= decvariables:dec variable:var
 	dec.setIntermediateCode(cb.create());
 	RESULT=dec;
 :} | {:
-	Decvariables dec = new Decvariables();
+	NonTerminalGeneric dec = new NonTerminalGeneric();
 	RESULT= dec;
 :};
 
 decfunciones ::= funcion:f decfunciones:df
 {:
 	ScopeIF scope = scopeManager.getCurrentScope();
-	Decfunciones dec = new Decfunciones();	
+	NonTerminalGeneric dec = new NonTerminalGeneric();	
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 	cb.addQuadruples(f.getIntermediateCode()); //codigo de la esta funcion
 	cb.addQuadruples(df.getIntermediateCode()); //codigo de las demas funciones
@@ -314,7 +314,7 @@ decfunciones ::= funcion:f decfunciones:df
 :}
  |  main:m 
 {:
-	Decfunciones dec = new Decfunciones();
+	NonTerminalGeneric dec = new NonTerminalGeneric();
 	dec.setIntermediateCode(m.getIntermediateCode()); //codigo de main
 	RESULT= dec;
 :};
@@ -329,7 +329,7 @@ constante ::= ID:id NUM:n SEMICOLON
 {:
 	Integer value = new Integer(Integer.valueOf(n.getLexema()));
 	String nombre = new String (id.getLexema());
-	Constante c =new Constante(nombre,value);
+	Constante c =new Constante(nombre, value);
 	RESULT=c;
 :}; 
 
@@ -699,10 +699,10 @@ variableC ::= ASSIGMENT NUM:nu //tras asignar o numero
 //Expresion logica
 *********************************************/
 
-expLog ::= expLog:e1 operador:op expLog:e2 //operacion
+expLog ::= expLog:e1 operador:operacion expLog:e2 //operacion
 {:
 	ScopeIF scope = scopeManager.getCurrentScope();
-	String operacion =op.getTipoOperador();
+	//String operacion =op.getTipoOperador();
 	TypeIF tipo1 = e1.getType();
 	TypeIF tipo2 = e2.getType();
 
@@ -727,7 +727,7 @@ expLog ::= expLog:e1 operador:op expLog:e2 //operacion
 	    		semanticErrorManager.semanticFatalError("La expresion aritmetica debe ser tipo Entera : ");
 	    case "OR":  
 	    	if (tipo1 instanceof TypeSimpleInteger && tipo2 instanceof TypeSimpleInteger) {
-	    		ExpLog e = new ExpLog(new TypeSimpleInteger(scope)); //lo añade como bool
+	    		ExpLog e = new ExpLog(new TypeSimpleInteger(scope)); 
 	    		cb.addQuadruple ("OR", temp, temp1, temp2); 
 	    		e.setTemporal (temp); 
 	    		e.setIntermediateCode (cb.create()); 
@@ -822,7 +822,7 @@ expLog ::= expLog:e1 operador:op expLog:e2 //operacion
 :}
 | invFunc:inf 
 {: 
-	String name = inf.getNombre();
+	String name = inf.getName();
 	ScopeIF scope = scopeManager.getCurrentScope();
 	
 	SymbolIF symbol=scopeManager.searchSymbol(name);
@@ -838,7 +838,7 @@ expLog ::= expLog:e1 operador:op expLog:e2 //operacion
 		 semanticErrorManager.semanticFatalError("ERROR FATAL DE FUNCION");
 
 	SymbolProcedure sym = (SymbolProcedure) symbol;
-	if (inf.getNumeroParametros() != sym.getNumeroParametros()) 
+	if (inf.getNumberOfParameters() != sym.getNumberOfParameters()) 
 		semanticErrorManager.semanticFatalError("Numero de Parametros no coincide!!!");
 	
 	ExpLog elog=new ExpLog(new TypeSimpleInteger(scope), true); //identifica esta expLog como llamada
@@ -865,10 +865,11 @@ expLog ::= expLog:e1 operador:op expLog:e2 //operacion
 /*********************************************
 //operador
 *********************************************/		
-operador::= MINUS {:RESULT=new Operador("MINUS");:}
-| OR {:RESULT=new Operador("OR");:}
-| MORE {:RESULT=new Operador("MORE");:}
-| EQUAL {:RESULT=new Operador("EQUAL");:};
+operador::= 
+MINUS {:RESULT=new String("MINUS");:}
+| OR {:RESULT=new String("OR");:}
+| MORE {:RESULT=new String("MORE");:}
+| EQUAL {:RESULT=new String("EQUAL");:};
 
 /*********************************************
 //Expresion acceso
@@ -1032,7 +1033,13 @@ expAsig ::= ID:id ASSIGMENT expLog:el
 	//algo mas complejo????
 	
 	if(el.isCall()){
+		
 		cb.addQuadruple("ASIG", var);
+		System.out.println("USO ASIG");
+		System.out.println(""+var.getName());
+		System.out.println(""+var.getScope());
+		System.out.println(""+var.getScope().getLevel());
+		System.out.println("*************************");
 		//cb.addQuadruple("MV", var, elTemp);
 		
 		}
@@ -1075,8 +1082,10 @@ expAcceso:ea ASSIGMENT:a expLog:el
 	}	
 	var.setOffset(offset);
 	
-	if(el.isCall())
+	if(el.isCall()) {
 		cb.addQuadruple("ASIG", var);
+		System.out.println("USO ASIG en Scope");
+		}
 	else
 		cb.addQuadruple("MV", var, elTemp); //de temp de exp logica a la direccion de la variable
 	
@@ -1144,11 +1153,11 @@ invFunc ::= ID:id OBRACKET invFuncA:inv CBRACKET //ej. decrementar ( invFunA )
 	if (tipo==null) 
 		semanticErrorManager.semanticFatalError("Procedimiento: "+name+" no ha sido declarado."+" Linea: "+id.getLine()+" Columna: "+id.getColumn());
 	
-	InvFunc invf = new InvFunc(name, tipo, inv.getNumeroParametros());
+	InvFunc invf = new InvFunc(name, tipo, inv.getNumberOfParameters());
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 
 	//codigo por parametro
-	for (Expresion parametro: inv.getParametros()) {
+	for (Expresion parametro: inv.getParameters()) {
 		cb.addQuadruples(parametro.getIntermediateCode()); //añade el codigo de cada parametro (si existe)
 		cb.addQuadruple("PARAM", parametro.getTemporal()); //genera CI
 	} 
@@ -1159,7 +1168,7 @@ invFunc ::= ID:id OBRACKET invFuncA:inv CBRACKET //ej. decrementar ( invFunA )
 		if (s.getName().equals(name))
 			scopeX=s;
 	Variable fun = new Variable(name, scopeX); //CAMBIO
-	cb.addQuadruple("CALL", fun, inv.getNumeroParametros());
+	cb.addQuadruple("CALL", fun, inv.getNumberOfParameters());
 	invf.setIntermediateCode(cb.create());
 	
 	RESULT=invf;
@@ -1223,14 +1232,14 @@ invFuncA ::= expresion:e
 //WIP sacar las cosas del for de la clases sentForA y craer codigo intermedio
 sentFor ::=  sentForA:sfa SEMICOLON //para el infinito 
 {:
-	SentFor senfor = new SentFor();
+	NonTerminalGeneric senfor = new NonTerminalGeneric();
 	senfor.setIntermediateCode(sfa.getIntermediateCode());
 	scopeManager.closeScope();
 	RESULT= senfor;
 :}
 | sentForA:sfa sentencia:sen //for y bloque debo crear un ambito??
 {:
-	SentFor senfor = new SentFor();
+	NonTerminalGeneric senfor = new NonTerminalGeneric();
 	ScopeIF scope = scopeManager.getCurrentScope();
 	LabelFactoryIF lf = new LabelFactory (); 
 	LabelIF lab1 = lf.create (); 
@@ -1533,24 +1542,26 @@ sentencia ::= bloqueSent:bs
 ***BLOQUE SENTENCIAS
 ***********************************/
 			   
-bloqueSent ::= OBRACE:pos  {:
-System.out.println("en que posicion esta el bloque: " +pos.getLine()+" "+pos.getColumn()+"\n");
-ScopeIF scope = scopeManager.openScope();:}
-tiposLocales:ti variablesLocales:var sentLocales:sen  CBRACE
+bloqueSent ::= OBRACE:pos  
+{:
+	System.out.println("en que posicion esta el bloque: " +pos.getLine()+" "+pos.getColumn()+"\n");
+	ScopeIF scope = scopeManager.openScope();
+:}
+	tiposLocales:ti variablesLocales:var sentLocales:sen  CBRACE
 {: //WIP opcional quizas cambiar orden
  	
  	ScopeIF scope = scopeManager.getCurrentScope();
  	
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 	Variable fun = new Variable("bloque", scope);
-	BloqueSent bs = new BloqueSent();
-	cb.addQuadruple("CALLB", fun);
+	NonTerminalGeneric bs = new NonTerminalGeneric();
+	cb.addQuadruple("B_START", fun);
 	cb.addQuadruples(var.getIntermediateCode());
 	cb.addQuadruples(sen.getIntermediateCode());
 	
-	cb.addQuadruple("CALLC", fun);
+	cb.addQuadruple("B_END", fun);
 	bs.setIntermediateCode(cb.create());
-scopeManager.closeScope();
+	scopeManager.closeScope();
 	RESULT = bs;
  :}  	 ;
 
@@ -1572,7 +1583,7 @@ variablesLocales ::= variablesLocales:vl variable:var
 	vl.setIntermediateCode(cb.create());
 	RESULT=vl;
 :} | {: 
-	 VariablesLocales vl= new VariablesLocales(); 
+	 NonTerminalGeneric vl= new NonTerminalGeneric(); 
 	 RESULT=vl;
 :};
 					
@@ -1585,7 +1596,7 @@ sentLocales ::= sentencia:sen sentLocales:sl
 	sl.setIntermediateCode(cb.create());
 	RESULT=sl;
 :} | {: 
-	SentLocales sl= new SentLocales();
+	NonTerminalGeneric sl= new NonTerminalGeneric();
 	RESULT=sl; 
 :};
 		    	 
@@ -1739,7 +1750,7 @@ funcionC ::= funcionC:fc variable:var
 
 	RESULT=fc;
 :} | {:
-	FuncionC fc = new FuncionC();
+	NonTerminalGeneric fc = new NonTerminalGeneric();
 	RESULT=fc;
 :};
 
@@ -1750,7 +1761,7 @@ funcionD ::= sentencia:sen funcionD:fd
 	SymbolTableIF sTable = scope.getSymbolTable();
 	
 	if (sen.isReturn()) //Si una de las sentencias es un return, poner el tipo
-		fd.setReturnType(sen.getTipoRetorno());
+		fd.setReturnType(sen.getReturnType());
 
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 	cb.addQuadruples(sen.getIntermediateCode()); //coger intermediate code y pasarselo a funcionD
@@ -1811,7 +1822,7 @@ main ::= VOID MAIN:mn
 OBRACKET CBRACKET OBRACE mainA:ma CBRACE
 {: 	
 	ScopeIF scope = scopeManager.getCurrentScope();
-	Main m = new Main();
+	NonTerminalGeneric m = new NonTerminalGeneric();
 	LabelIF label = new LabelFactory().create("MAIN");
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
 	cb.addQuadruple("INL",label); // uno por funcion, para test
@@ -1832,7 +1843,7 @@ mainA ::= mainB:mb mainC:mc mainD:md
 {: 
 	ScopeIF scope = scopeManager.getCurrentScope();
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(scope);
-	Main ma= new Main();
+	NonTerminalGeneric ma= new NonTerminalGeneric();
 	cb.addQuadruples(mc.getIntermediateCode());
 	cb.addQuadruples(md.getIntermediateCode());
 	ma.setIntermediateCode(cb.create());
@@ -1854,7 +1865,7 @@ mainC ::= mainC:mc variable:var
 	
 	RESULT=mc;
 :} | {:
-	Main mc= new Main(); 
+	NonTerminalGeneric mc= new NonTerminalGeneric(); 
 	RESULT=mc;
 :};
 						
@@ -1867,7 +1878,7 @@ mainD ::= sentencia:sen mainD:md
 	md.setIntermediateCode(cb.create());
 	RESULT=md;
 :} | {: 
-	Main md = new Main();
+	NonTerminalGeneric md = new NonTerminalGeneric();
 	RESULT= md;
 :};
 

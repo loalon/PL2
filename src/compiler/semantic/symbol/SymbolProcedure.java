@@ -27,7 +27,7 @@ public class SymbolProcedure extends SymbolBase
         this (scope, name, type);
         this.numberOfParameters=numberOfParameters;
     } 
-	public int getNumeroParametros(){
+	public int getNumberOfParameters(){
 		return numberOfParameters;
 	}
 	public void setNumberOfParameters(int numberOfParameters){

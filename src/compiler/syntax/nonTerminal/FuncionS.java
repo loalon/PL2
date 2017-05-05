@@ -25,6 +25,7 @@ public class FuncionS extends NonTerminal {
 		this(returnType);
 		this.parameters=parameters;
 	}
+	
 	public TypeIF getReturnType(){
 		return returnType;
 	}

@@ -5,6 +5,11 @@ import es.uned.lsi.compiler.intermediate.LabelFactory;
 import es.uned.lsi.compiler.intermediate.LabelIF;
 import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 
+/**
+ * Clase traductora para las operaciones OR
+ * Guarda 1 en el temporal si es cierto
+ */
+
 public class TranslatorOR extends Translator {
 
 	StringBuilder temporal=new StringBuilder();

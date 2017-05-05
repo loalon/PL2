@@ -18,9 +18,7 @@ public class CamporegB extends NonTerminal {
 	
 	public CamporegB (String nombre, TypeIF tipo, ArrayList<String> lista) {
 		this(nombre, tipo);
-		//this.tipo=tipo;
 		this.lista=lista;
-		//this.lista.add(nombre);
 	}
 	public TypeIF getType(){
 		return tipo;
@@ -36,10 +34,4 @@ public class CamporegB extends NonTerminal {
 		this.lista.add(var);
 	}
 
-	//public get ()
-	//public set ()
-	
-	//long hascode()
-	//boolean equals (Object o)
-	// public String toString()
 }

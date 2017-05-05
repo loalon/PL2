@@ -22,10 +22,10 @@ public class InvFuncA extends NonTerminal {
 		this.lista.add(exp);
 		numeroParametros++;
 	}
-	public int getNumeroParametros(){
+	public int getNumberOfParameters(){
 		return numeroParametros;
 	}
-	public ArrayList<Expresion> getParametros(){
+	public ArrayList<Expresion> getParameters(){
 		return lista;
 	}
 

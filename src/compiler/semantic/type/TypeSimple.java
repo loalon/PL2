@@ -10,12 +10,9 @@ import es.uned.lsi.compiler.semantic.type.TypeBase;
  * Class for TypeSimple.
  */
 
-// TODO: Student work
-//       Include properties to characterize simple types
-
 public class TypeSimple  extends TypeBase
 {
-    private int valor;
+    //private int valor;
 
     /**
      * Constructor for TypeSimple.
@@ -39,11 +36,12 @@ public class TypeSimple  extends TypeBase
         ExecutionEnvironmentIF environment = CompilerContext.getExecutionEnvironment ();
         return environment.getTypeSize (this);
     }
+    /*
     public int getValor(){
     	return valor;
     }
     public int setValor(){
     	return valor;
     }
-
+*/
 }

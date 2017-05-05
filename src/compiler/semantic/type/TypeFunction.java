@@ -13,7 +13,7 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
 public class TypeFunction  extends TypeProcedure
 {   
 	private TypeIF returnType;
-	private ScopeIF scope;
+	//private ScopeIF scope;
     /**
      * Constructor for TypeFunction.
      * @param scope The declaration scope.
@@ -40,7 +40,6 @@ public class TypeFunction  extends TypeProcedure
     @Override
     public int getSize ()
     {
-        // TODO: Student work
         return 1;
     }
 	public TypeIF getReturnType() 

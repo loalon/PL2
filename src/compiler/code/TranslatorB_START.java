@@ -12,7 +12,7 @@ import es.uned.lsi.compiler.intermediate.TemporalIF;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.symbol.SymbolIF;
 
-public class TranslatorCALLB extends Translator{
+public class TranslatorB_START extends Translator{
 	
 	//StringBuilder temporal=new StringBuilder();
 	
@@ -43,7 +43,8 @@ public class TranslatorCALLB extends Translator{
 			tempSize+=t.getSize();
 		}
 
-		temporal.append("MOVE #"+level+", /"+(DISPLAY0+1)+"\n"); //muevo el nivel actual
+		//temporal.append("MOVE #"+level+", /"+(DISPLAY0+1)+"\n"); //muevo el nivel actual
+		temporal.append("INC /"+(DISPLAY0+1)+"\n"); //test
 		System.out.println("nivel: "+level);
 
 		temporal.append("MOVE .SP, .R4\n"); // puntero de pila antes de la llamada, aqui volvera al cerrar RA

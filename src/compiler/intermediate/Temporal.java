@@ -13,7 +13,7 @@ public class Temporal
     private String  name    = null;
     private ScopeIF scope   = null;
     private int     address = 0;
-    private int     size = 1;
+    private int     size = 1; //establece el tamaño de cada temporal
            
     /**
      * Constructor for Temporal.

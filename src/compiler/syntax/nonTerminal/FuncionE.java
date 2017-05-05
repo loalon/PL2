@@ -24,7 +24,8 @@ public class FuncionE extends NonTerminal {
 	public ArrayList<String> getParameters() {
 		return lista;
 	}	
+	/*
 	public int getNumeroParametros() {
 		return lista.size();
-	}
+	}*/
 }

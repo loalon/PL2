@@ -10,11 +10,7 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class SymbolFunction  extends SymbolProcedure
 {
-	//private ScopeIF scope;
-	//private TypeIF type;
-	//private String name;
-	//private int numeroParametros;
-	//private int size;
+
     /**
      * Constructor for SymbolFunction.
      * @param scope The declaration scope.

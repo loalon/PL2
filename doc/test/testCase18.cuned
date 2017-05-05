@@ -1,0 +1,41 @@
+
+struct Numeros {
+	int nueve;
+	int cuatro;
+
+}
+ 
+int varNivel0=5555;
+
+int restar(int a, int b) {
+	int c;
+	c= a -b ;
+	return c;
+}
+
+void pruebaAsignacion() {
+	int var =varNivel0;
+	printc("la variable debe valer 5555:");
+	printi(var);
+	
+	{
+		Numeros nums;
+		nums.nueve=9;
+		nums.cuatro=4;
+		var=restar (nums.nueve , nums.cuatro);
+	}
+
+	printc("la variable debe valer 5:");
+	printi(var);
+	var=restar (20 , 6);
+	printc("la variable debe valer 14:");
+	printi(var);
+}
+
+
+
+void main() {
+
+	pruebaAsignacion();
+
+}

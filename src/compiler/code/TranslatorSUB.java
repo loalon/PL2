@@ -3,6 +3,11 @@ package compiler.code;
 import compiler.intermediate.Temporal;
 import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 
+/**
+ * Clase traductora para las operaciones SUB
+ * Resta los valores de 2 temporales y lo almacena en una tercera posicion
+ */
+
 public class TranslatorSUB extends Translator {
 	
 	StringBuilder temporal=new StringBuilder();

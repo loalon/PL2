@@ -23,12 +23,14 @@ public class Funcion extends NonTerminal {
 		this(name, type);
 		this.parameters=parameters;
 	}
+	/*
 	public String getNombre () {
 		return name;
 	}
 	public TypeIF getTipo () {
 		return type;
-	}	
+	}
+	*/	
 	public ArrayList<String> getParameters () {
 		return parameters;
 	}	

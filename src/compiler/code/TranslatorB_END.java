@@ -12,7 +12,7 @@ import es.uned.lsi.compiler.intermediate.TemporalIF;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.symbol.SymbolIF;
 
-public class TranslatorCALLC extends Translator{
+public class TranslatorB_END extends Translator{
 	
 
 	@Override
@@ -31,8 +31,8 @@ public class TranslatorCALLC extends Translator{
 		temporal.append("POP .IY\n"); //valor de prueba +4 a la basura
 		temporal.append("POP .IX\n"); //valor de prueba +3 a la basura
 		temporal.append("POP .SP\n"); //valor de prueba +2 a la basura
-		temporal.append("MOVE #"+(level-1)+", /"+(DISPLAY0+1)+"\n"); //resto un nivel de ejecucion
-
+		//temporal.append("MOVE #"+(level-1)+", /"+(DISPLAY0+1)+"\n"); //resto un nivel de ejecucion
+		temporal.append("DEC /"+(DISPLAY0+1)+"\n"); //test
 		return  temporal.toString();
 		
 	

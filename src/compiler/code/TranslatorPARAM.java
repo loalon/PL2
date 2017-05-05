@@ -3,6 +3,11 @@ package compiler.code;
 import compiler.intermediate.Temporal;
 import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 
+/**
+ * Clase traductora para las operaciones PARAM
+ * Inserta en la cima de la pila un parametro
+ */
+
 public class TranslatorPARAM extends Translator{
 	
 	//StringBuilder temporal=new StringBuilder();

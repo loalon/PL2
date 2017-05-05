@@ -7,7 +7,10 @@ import es.uned.lsi.compiler.intermediate.LabelFactory;
 import es.uned.lsi.compiler.intermediate.LabelIF;
 import es.uned.lsi.compiler.intermediate.OperandIF;
 import es.uned.lsi.compiler.intermediate.QuadrupleIF;
-
+/**
+ * Clase traductora para las operaciones MV
+ * Gestion de movimientos de temporales y variables
+ */
 public class TranslatorMV extends Translator {
 	
 

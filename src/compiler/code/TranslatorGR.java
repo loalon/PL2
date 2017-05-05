@@ -1,9 +1,15 @@
 package compiler.code;
 
 import compiler.intermediate.Temporal;
+
 import es.uned.lsi.compiler.intermediate.LabelFactory;
 import es.uned.lsi.compiler.intermediate.LabelIF;
 import es.uned.lsi.compiler.intermediate.QuadrupleIF;
+
+/**
+ * Clase traductora para las operaciones GR (mayor que)
+ * Guarda 1 en el temporal si es cierto
+ */
 
 public class TranslatorGR extends Translator{
 	

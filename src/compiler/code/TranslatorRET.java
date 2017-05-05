@@ -3,6 +3,11 @@ package compiler.code;
 import compiler.intermediate.Temporal;
 import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 
+/**
+ * Clase traductora para las operaciones RET
+ * Retorna de una funcion
+ */
+
 public class TranslatorRET extends Translator {
 	
 	//StringBuilder temporal=new StringBuilder();

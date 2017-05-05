@@ -8,32 +8,28 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
  * Class for SymbolConstant.
  */
 
-// TODO: Student work
-//       Include properties to characterize constants
 
 public class SymbolConstant extends SymbolBase
 {
-	private int valor; //añadir parametro para almacenar el valor
-	//private ScopeIF scope;
-	//private TypeIF type;
-	//private String name;
+	private int value; // parametro para almacenar el valor
+
     /**
      * Constructor for SymbolConstant.
      * @param scope The declaration scope.
      * @param name The symbol name.
      * @param type The symbol type.
      */
-    public SymbolConstant (ScopeIF scope, String name, TypeIF type, int valor)
+    public SymbolConstant (ScopeIF scope, String name, TypeIF type, int value)
     {
         super (scope, name, type);
-		this.valor = valor;
+		this.value = value;
 	}
 	
 	public int getValue() {
-		return valor;
+		return value;
 	}
-	public void setValue(int valor)	{
-		this.valor = valor;
+	public void setValue(int value)	{
+		this.value = value;
 	}
     
 }

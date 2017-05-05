@@ -61,8 +61,8 @@ public class TranslatorCALL extends Translator{
 		if (name.equals("main"))
 			level=0; //si es main, se le asigna el nivel 0 para todo
 			
-		temporal.append("MOVE #"+(level)+", /"+(DISPLAY0+1)+"\n");
-		
+		//temporal.append("MOVE #"+(level)+", /"+(DISPLAY0+1)+"\n");
+		temporal.append("INC /"+(DISPLAY0+1)+"\n"); //test
 		 
 		
 		temporal.append("SUB .SP, #"+(parameters)+"\n"); // almaceno el valor de puntero pila.SP de antes(quito los parametros)
@@ -116,6 +116,7 @@ public class TranslatorCALL extends Translator{
 		
 		//OJO!!! lo siguiente almacena en el .IX del llamante!!!
 		temporal.append("MOVE .R9, #1[.IX]\n"); // inserta el resultado en la direccion referenciada por el A (IX+1)
+		temporal.append("DEC /"+(DISPLAY0+1)+"\n"); //test
 		//temporal.append("MOVE #"+(level-1)+", /"+(DISPLAY0+1)+"\n"); //resto un nivel de ejecucion
 		//temporal.append("MOVE #"+result.getAddress()+"[.IY], .R9\n"); //almacena valor en R9
 		return  temporal.toString();

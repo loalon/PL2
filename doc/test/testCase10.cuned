@@ -1,4 +1,4 @@
-/* vacio  */
+#define RESPUESTA 42;
 
 struct NumerosPares {
 	int dos;

@@ -16,6 +16,7 @@ void f () {
 	
 		
 	{ int a =220, c= 221;
+	
 		printc("en nivel 2");
 		printc("debe imprimir (220)");
 		printi (a); /* Escribe 2, referencia no local */ 
@@ -44,7 +45,9 @@ void f () {
 		printi (c); /* Escribe 2, referencia no local */ 
 		
 	}
-
+		printc("en nivel 1, tras salir del bucle");
+		printc("debe imprimir (110), el int a anterior solo crea una var local");
+		printi (a); /* Escribe a, referencia  local */
 	printc("saliendo de la funcion");
 }
 

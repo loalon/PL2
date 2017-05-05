@@ -8,6 +8,11 @@ import compiler.semantic.type.TypeString;
 import es.uned.lsi.compiler.intermediate.OperandIF;
 import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 
+/**
+ * Clase traductora para las operaciones PRINT
+ * Gestiona las sentencia de impresion
+ */
+
 public class TranslatorPRINT extends Translator{
 	
 	StringBuilder temporal=new StringBuilder();
@@ -43,10 +48,11 @@ public class TranslatorPRINT extends Translator{
 			//varaible string
 			
 				
-			if (var.getType() instanceof TypeString) {
-				temporal.append("WRSTR /"+var.getName()+"\n"); //hago referencia a la etiqueta
-				temporal.append("WRCHAR #10"); 
-			} else if (var.getType() instanceof TypeSimpleInteger) {
+			//if (var.getType() instanceof TypeString) {
+				//temporal.append("WRSTR /"+var.getName()+"\n"); //hago referencia a la etiqueta
+				//temporal.append("WRCHAR #10"); 
+			//} else 
+			if (var.getType() instanceof TypeSimpleInteger) {
 				if(var.getScope().getLevel()==0){ //scope global
 					temporal.append("WRINT #"+var.getAddress()+"[.IX]\n");
 					temporal.append("WRCHAR #10");

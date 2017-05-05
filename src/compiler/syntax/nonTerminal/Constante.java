@@ -2,35 +2,30 @@ package compiler.syntax.nonTerminal;
 
 public class Constante extends NonTerminal {
 
-	private int valor;
+	private int value;
 	private String nombre;
 	
-	// no tengo claro su utilidad
 	public Constante () {
 		super();
 	}
 		
-	public Constante(String nombre, int valor) {
+	public Constante(String nombre, int value) {
 		this();
-		this.valor=valor;
+		this.value=value;
 		this.nombre=nombre;
 	}
 	
-	public int getValor(){
-		return valor;
+	public int getValue(){
+		return value;
 	}
-	public void setValor(int valor){
+	/*
+	public void setValue(int valor){
 		this.valor=valor;
-	}	
-	public String getNombre(){
+	}*/	
+	public String getName(){
 		return nombre;
 	}
 	public String toString() {
 		return nombre;
 	}
 }
-
-	
-	//long hascode()
-	//boolean equals (Object o)
-	// public String toString() 

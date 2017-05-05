@@ -38,6 +38,7 @@ public class Variable  implements VariableIF
         this.type = type;
         
     }
+    //se basa en los datos de un simbolo variable
     public Variable(SymbolVariable sv)
     {
     	this(sv.getName(), sv.getScope(), sv.getType());
@@ -45,12 +46,13 @@ public class Variable  implements VariableIF
     	this.sv=sv;
     
     }
+    //se basa en los datos de un simbolo parametro
     public Variable(SymbolParameter sp)
     {
     	this(sp.getName(), sp.getScope(), sp.getType());
-    	this.address=sp.getAddress();
+    	this.address=sp.getAddress(); 
     	this.sp=sp;
-    	this.isParameter=true;//quizas no necesario
+    	this.isParameter=true;
     
     }
 
@@ -85,17 +87,17 @@ public class Variable  implements VariableIF
     public final int getAddress () {
         
     	if(isParameter)
-    		return sp.getAddress()+offset;
+    		return sp.getAddress()+offset; //son direcciones negativas
         else
-        	return sv.getAddress()+offset;
+        	return sv.getAddress()+offset; //son direcciones positivas
   
     }
     public void setAddress (int address) {
     	    	
     	if(isParameter)
-    		sp.setAddress(address);
+    		sp.setAddress(address); //son direcciones negativas
         else
-        	sv.setAddress(address);
+        	sv.setAddress(address); //son direcciones positivas
     
     }
     public void setOffset (int offset) {

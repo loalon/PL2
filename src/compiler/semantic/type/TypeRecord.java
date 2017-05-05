@@ -5,22 +5,15 @@ import java.util.Map;
 
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.type.TypeBase;
-import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 /**
  * Class for TypeRecord.
  */
 
-// TODO: Student work
-//       Include properties to characterize records
-
 public class TypeRecord extends TypeBase
 {   
-	//private String name;
-	//private Map<String, TypeIF> fields = new HashMap<String, TypeIF>();
 	private Map<String, Integer> offset= new HashMap<String, Integer>();
 	private int size=0;
-	//private ScopeIF scope;
 	
        
     /**
@@ -57,18 +50,7 @@ public class TypeRecord extends TypeBase
         this.size=size;
         this.offset=map;
     }
-    /*
-    public void addField(String name, TypeIF type){
-    	//añade campo y calcula su tamaño
-    	
-    	fields.put(name, type);
-    	if (type instanceof TypeRecord){
-    		int size= type.getSize();
-    		offset.put(name, size);
-    	}
-    	
-    }
-    */
+
     public void addOffsetMap(Map<String, Integer> map){
     	this.offset=map;
     }
@@ -77,8 +59,6 @@ public class TypeRecord extends TypeBase
     }
     public int getOffset(String name){ //para una variable, devuelve su desplazamiento
     	return (int) offset.get(name);
-    	//System.out.println(offset.toString());
-    	//return 14;
     }
     /**
      * Returns the size of the type.

@@ -19,13 +19,14 @@ public class InvFunc extends NonTerminal {
 		this.numeroParametros=parametros;
 	}
 	
-	public String getNombre () {
+	public String getName () {
 		return nombre;
 	}
+	/*
 	public TypeIF getTipo () {
 		return tipo;
-	}	
-	public int getNumeroParametros(){
+	}*/	
+	public int getNumberOfParameters(){
 		return numeroParametros;
 	}
 	//public set ()
