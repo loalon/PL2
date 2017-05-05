@@ -93,7 +93,6 @@ non terminal Axiom		axiom;
 
 non terminal Constante constanteS;
 non terminal Constante constante;
-//non terminal Grupos<Constante>	decconstantes;
 non terminal 	decconstantes;
 
 non terminal	Tipo	tipo;

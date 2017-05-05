@@ -17,8 +17,9 @@ void imprimirTestIterativo (int veces) {
 	int i;
 	for (i=veces; i==0; i=i-1)
 	{
+		printc("El parametro es (5):");
 		printi(veces);
-		printc("Prueba de impresion. Quedan estas veces (0): ");
+		printc("Prueba de impresion. El bucle se ejecutara: ");
 		printi(i);
 	}
 		

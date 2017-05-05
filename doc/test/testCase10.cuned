@@ -54,30 +54,7 @@ void imprimirTestRecursivo (int veces) {
 		imprimirTestRecursivo(veces-1);
 	}	
 }
-/*
-void imprimirTestIterativoRecursivo (int veces) {
-	int i;
-	for (i=veces; i==0; i=i-1)
-	{
-		printc("Prueba de impresion. Veces deberia ser (0): ");
-		printi(veces);
-	}
-		
-}
-*/
-void f () { 
-	int a=100, b = 1010; 
-	varNivel0=5555;
-	{ int a=285, c = 2722; /*nivel2*/
-		{ int d = 3489; /*nivel3*/
-			printi (a); /* Escribe 2, referencia no local */ 
-			printi (b); /* Escribe 1, referencia no local */ 
-			printi (c); /* Escribe 2, referencia no local */ 
-			printi (d); /* Escribe 3, referencia local */ 
-			printi (varNivel0); /* Escribe 5555, referencia global */
-		} 
-	}
-}
+
 
 int restar(int a, int b) {
 
@@ -109,13 +86,11 @@ void main() {
 	nums.numPares.ocho=8;
 	nums.numPares.seis=6;
 	
+	printc("TEST de structs");
 	resul6 = restar(nums.numPares.ocho, nums.numPares.dos);
 
-/*	printc("TEST recursivo");
+	printc("TEST recursivo");
 	imprimirTestRecursivo(5);
-	printc("TEST iterativo");
-	f();*/
-	/*imprimirTestIterativoRecursivo(6);*/
 	
 	printc("TEST operaciones");
 	if (resul6 == nums.numPares.seis){/*nivel2*/

@@ -1,0 +1,65 @@
+/* vacio  */
+
+int varNivel0=5555;
+
+void nivel2() {
+	printc("Este es el nivel 2");
+}
+
+void nivel3() {
+	printc("Este es el nivel 3");
+}
+
+void nivel4() {
+	printc("Este es el nivel 4");
+}
+
+void hacia3() {
+	printc("Este es el nivel 2");
+	printc("Desciendo a 3");
+	nivel3();
+}
+
+void desde3a4() {
+	printc("Este es el nivel 3");
+	printc("Desciendo a 4");
+	nivel4();
+}
+
+void hacia4() {
+	printc("Este es el nivel 2");
+	printc("Desciendo a 3");
+	desde3a4();
+}
+
+void llamadas1() {
+	/*es el nivel 2*/
+	printc("Deberia informar solo sobre el 2");
+	nivel2();
+	/*visito el nivel 3*/
+	printc("Deberia informar que baja al 2 y luego al 3");
+	hacia3();
+	/*visito el nivel 4*/
+	printc("Deberia informar que baja al 2 al 3 y al 4");
+	hacia4();
+	printc("Devuelta al nivel1");
+}
+
+void llamadas2() {
+/* tres llamdas 2*/
+/*primero a 2, luego a 3 y regreso a 2*/
+	nivel2();
+	hacia3();
+	nivel2();
+	printc("De vuelta al nivel 1");
+}
+
+
+void main() {
+
+	printc("TEST llamadas");
+	llamadas1();
+	llamadas2();
+	printc("Vuelvo a main");
+
+}

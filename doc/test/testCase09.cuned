@@ -1,0 +1,26 @@
+/* vacio  */
+
+#define OCHENTA 80;
+
+int varGlobal = 555;
+
+void f(int vez) {
+	int ene=234;
+	printc("Imprime parametro (77): ");
+	printi(vez);
+	printc("Imprime variable local (234): ");
+	printi(ene);	
+	printc("Imprime variable global (555): ");
+	printi(varGlobal);	
+	printc("Imprime constante (80): ");
+	printi(OCHENTA);	
+}
+
+void main() {
+
+	int a=77;
+
+	printc("LLAMADA SIMPLE");
+	f(a);
+
+}
